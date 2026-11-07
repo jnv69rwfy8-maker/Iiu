@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="مساحتي">
+<title>مساحتي — Personal Utility Hub</title>
+<link rel="manifest" href="./manifest.json"><link rel="apple-touch-icon" href="./apple-touch-icon.png"><meta name="theme-color" content="#1C1310">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Inter:wght@600;800&family=Cormorant+Garamond:wght@600;700&family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAF1ED;--card:rgba(255,255,255,.78);--p:#A95C42;--p2:#C97A5E;--t:#1A110E;--m:#7a5f55;--bd:rgba(169,92,66,.28);--sh:0 8px 28px rgba(40,26,21,.08);--dk:rgba(250,241,237,.88);color-scheme:light}
+:root[data-theme=dark]{--bg:#1C1310;--card:rgba(40,26,21,.62);--p:#D9886C;--p2:#A95C42;--t:#FDFBF7;--m:#b9a399;--sh:0 8px 28px rgba(0,0,0,.4);--dk:rgba(28,19,16,.85);color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;color:var(--t);font:16px/1.6 Cairo,Tahoma,sans-serif;background:radial-gradient(circle at 12% 0,rgba(217,136,108,.25),transparent 45%),radial-gradient(circle at 100% 45%,rgba(169,92,66,.2),transparent 40%),var(--bg);background-attachment:fixed;}
+main{max-width:900px;margin:0 auto;padding:12px 14px 120px}
+.top{display:flex;justify-content:space-between;align-items:center;direction:ltr;padding:4px 0}
+.wm{display:flex;align-items:center;gap:8px;font:700 20px 'Cormorant Garamond',Georgia,serif;color:var(--p);white-space:nowrap;flex:none;letter-spacing:1.25px}.wm span{white-space:nowrap}.wm #wmn{font-size:21px;letter-spacing:1.55px;text-shadow:0 1px 8px rgba(169,92,66,.18)}
+.wm svg{filter:drop-shadow(0 3px 8px rgba(169,92,66,.5))}
+.sv{font-size:12px;color:var(--p);direction:rtl;opacity:.7;transition:.3s}
+.hero{padding:6px 2px 14px}
+.hero h1{font-size:28px;font-weight:800;margin:0;line-height:1.3}
+#dt{color:var(--m);font-size:14px}
+#app{display:block;min-height:55vh}.side-watermark{position:fixed;right:3px;top:43%;z-index:2;pointer-events:none;writing-mode:vertical-rl;transform:rotate(180deg);font:700 11px 'Cormorant Garamond',Georgia,serif;letter-spacing:5px;color:var(--p);opacity:.16;text-shadow:0 0 10px var(--p);white-space:nowrap}
+@media(min-width:760px){main{max-width:820px}#app{max-width:760px;margin-inline:auto}}
+.top{position:sticky;top:0;z-index:18;padding:8px 2px;background:var(--bg);border-bottom:1px solid var(--bd)}
+.card{margin:0 0 14px;backdrop-filter:none;-webkit-backdrop-filter:none}
+#dock{max-width:680px;justify-content:space-around}
+#dock button{min-width:0;white-space:nowrap;transition:background .2s ease,color .2s ease}
+#dock button span{font-size:21px;line-height:1.25}
+.hero{padding:10px 2px 14px}
+.hero h1{letter-spacing:.2px}
+.page-kicker{font-size:12px;color:var(--m);letter-spacing:.4px}
+.place-tools{display:grid;grid-template-columns:1fr;gap:8px;margin:10px 0}
+.place-list{display:grid;grid-template-columns:1fr;gap:10px}
+.place-card{display:grid;grid-template-columns:64px minmax(0,1fr);gap:11px;align-items:center;border:1px solid var(--bd);border-radius:17px;padding:10px;background:rgba(169,92,66,.055)}
+.place-thumb{width:64px;height:64px;border-radius:15px;display:grid;place-items:center;font-size:29px;background:linear-gradient(145deg,rgba(217,136,108,.28),rgba(169,92,66,.10));border:1px solid var(--bd)}
+.place-card h3{font:700 16px/1.45 'Reem Kufi',Cairo,sans-serif;margin:0 0 3px;color:var(--t)}
+.place-card p{font-size:12px;line-height:1.55;margin:0;color:var(--m)}
+.place-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:7px}
+.place-actions button{font-size:12px;padding:6px 10px}
+.place-detail{border:1px solid var(--bd);border-radius:19px;padding:14px;background:rgba(169,92,66,.055)}
+.place-detail h3{font:700 22px/1.5 'Aref Ruqaa',Cairo,serif;margin:5px 0}
+.place-detail p{margin:7px 0}
+.place-route{border:1px dashed var(--bd);border-radius:14px;padding:12px;margin:12px 0;line-height:1.8}
+.metro-brand{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid var(--bd);border-radius:17px;background:rgba(169,92,66,.06);margin-bottom:12px}
+.metro-mark{width:48px;height:48px;flex:none}
+.metro-line{display:flex;align-items:center;gap:7px;margin:9px 0;font-size:13px}
+.metro-line b{white-space:nowrap}
+.metro-line i{height:4px;flex:1;border-radius:8px;background:var(--p)}
+@media(min-width:560px){.place-list{grid-template-columns:1fr 1fr}.place-tools{grid-template-columns:1fr 190px}}
+
+h2{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:800;margin:0 0 12px}
+.ic{font-style:normal;width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(135deg,rgba(217,136,108,.3),rgba(169,92,66,.15));border:1px solid var(--bd);font-size:20px}
+.card{background:var(--card);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--bd);border-radius:22px;padding:16px;box-shadow:var(--sh)}
+button,select{font:700 15px Cairo,sans-serif;border:1px solid var(--bd);background:rgba(169,92,66,.1);color:var(--t);border-radius:12px;padding:8px 14px;cursor:pointer}
+button:active{transform:scale(.96)}
+button.f{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;border:0;box-shadow:0 4px 14px rgba(169,92,66,.4)}
+button.x{border:0;background:none;padding:4px 8px;color:var(--m)}
+select{background:var(--bg);color:var(--t)}
+input,textarea{font:16px Cairo,sans-serif;background:rgba(127,127,127,.1);color:var(--t);border:1px solid var(--bd);border-radius:12px;padding:9px 11px;min-width:0;flex:1;width:100%}
+input[type=checkbox]{width:20px;height:20px;flex:none;accent-color:var(--p)}
+input[type=range]{accent-color:var(--p);padding:0}
+input[type=file]{font-size:13px}
+textarea{min-height:90px;resize:vertical}
+.r{display:flex;gap:8px;align-items:center;margin:8px 0;flex-wrap:wrap}
+.r>input{width:auto;flex:1 1 90px}
+.g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;font-size:13px;color:var(--m)}
+.g>div{background:rgba(169,92,66,.1);border-radius:14px;padding:8px 2px}
+.n{display:block;font:800 34px Inter,system-ui,sans-serif;color:var(--p);line-height:1.2}
+.big{font:800 44px Inter,system-ui,sans-serif;text-align:center;color:var(--p);margin:6px 0}
+.chip{display:inline-block;border:1px solid var(--bd);background:rgba(169,92,66,.08);border-radius:20px;padding:2px 11px;margin:3px;font-size:13px;font-family:Cairo,sans-serif;color:var(--t)}
+.em{color:var(--m);text-align:center;font-size:14px}
+small{color:var(--m)}
+.bars{display:flex;gap:6px;align-items:flex-end;height:120px;text-align:center}
+.bars div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.bars i{display:block;width:100%;background:linear-gradient(var(--p),var(--p2));border-radius:8px 8px 0 0;min-height:3px}
+.fi{display:inline-block;position:relative;margin:4px}
+.fi img,.fi video{width:100px;height:100px;object-fit:cover;border-radius:12px}
+.fi button{position:absolute;top:0;left:0;background:var(--bg);padding:2px 6px}
+#clk,#sm{position:fixed;inset:0;display:none;z-index:30;align-items:center;justify-content:center;flex-direction:column;background:#000;color:#fff;direction:ltr}
+#sm{background:var(--bg);color:var(--t);direction:rtl;gap:10px}
+.fl{display:flex;gap:6px;align-items:center}
+.fl span{font:800 22vw/1 Inter,sans-serif;background:#222;border-radius:14px;padding:2vw}
+.fl em{font-size:12vw}
+.oled{font:800 26vw Inter,sans-serif}
+#toast{position:fixed;bottom:110px;inset-inline:20px;background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;padding:10px;border-radius:14px;text-align:center;display:none;z-index:40}
+.beam{height:10px;background:linear-gradient(90deg,var(--p2),var(--p));border-radius:5px;transition:transform .5s;margin:30px 0}
+canvas{width:100%;height:100px;display:block}
+#dock{position:fixed;bottom:calc(10px + env(safe-area-inset-bottom));inset-inline:12px;max-width:520px;margin:0 auto;display:flex;gap:4px;padding:7px;border-radius:26px;background:var(--dk);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--bd);box-shadow:var(--sh);z-index:20}
+#dock button{flex:1;border:0;background:none;border-radius:19px;display:flex;flex-direction:column;align-items:center;padding:5px 2px;color:var(--m);font-size:11px;line-height:1.3;box-shadow:none}
+#dock button span{font-size:22px}
+#dock button.on{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff}
+html,body{height:100%;margin:0;overflow:hidden;overscroll-behavior:none;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea{-webkit-user-select:text;user-select:text}
+#sc{position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-top:env(safe-area-inset-top)}
+.hero h1{font:700 32px/1.5 'Aref Ruqaa',Cairo,serif;color:var(--t);text-shadow:0 2px 14px rgba(217,136,108,.35)}
+h2,#dock button,summary{font-family:'Reem Kufi',Cairo,sans-serif}
+h2{font-weight:700;font-size:20px}
+h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--bd),transparent)}
+.card{position:relative}
+.card::before{content:'✦';position:absolute;top:8px;left:14px;color:var(--p);opacity:.35;font-size:13px}
+.orn{display:flex;align-items:center;gap:10px;color:var(--p);margin:6px 0 2px}
+.orn::before,.orn::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--p),transparent)}
+.noo .orn,.noo .card::before,.noo h2::after{display:none}
+.nb .card,.nb #dock{backdrop-filter:none;-webkit-backdrop-filter:none}
+details{border:1px solid var(--bd);border-radius:14px;margin:8px 0;padding:4px 12px;background:rgba(169,92,66,.05)}
+summary{font-weight:700;font-size:16px;cursor:pointer;padding:8px 0}
+#dt div{line-height:1.7}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.tiles>div{background:rgba(169,92,66,.1);border:1px solid var(--bd);border-radius:16px;padding:10px 6px;text-align:center;font-size:13px;line-height:1.4;color:var(--m)}
+.tiles i{font-style:normal;display:block;font-size:20px}
+.tiles b{display:block;font:800 28px Inter,system-ui,sans-serif;color:var(--p)}
+.cc{display:flex;align-items:center;gap:14px}
+.ccs{flex:1;display:grid;gap:6px}
+.ccs>div{background:rgba(169,92,66,.1);border-radius:12px;padding:6px 10px;font-size:13px;color:var(--m);display:flex;align-items:center;gap:8px}
+.ccs b{font:800 22px Inter,system-ui,sans-serif;color:var(--p);min-width:30px}
+.nx{margin:6px 0 10px;padding:10px;border-radius:14px;border:1px dashed var(--bd)}
+.qa{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tip{color:var(--m);font-size:14px;margin:10px 0 0}
+.chip.on{background:var(--p);color:#fff}
+.bars{gap:3px}.bars div{min-width:0}.bars small{font-size:10px;white-space:nowrap}.bars .dn{font-size:10.5px}
+.fl.sm span{font-size:13vw;padding:1.5vw}.fl.sm em{font-size:8vw}
+.pb{flex:1;height:8px;border-radius:4px;background:rgba(127,127,127,.25);overflow:hidden;min-width:40px}.pb i{display:block;height:100%;background:linear-gradient(90deg,var(--p2),var(--p));border-radius:4px;transition:width .4s}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.cats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}.cats button{padding:8px 4px;line-height:1.3}
+.f small{color:#fff}
+.grp{border:1px solid var(--bd);border-radius:16px;padding:8px 10px;margin:8px 0;background:rgba(169,92,66,.05)}
+.sr{padding:4px 8px;border-radius:10px;margin:2px 0}.sr.cu{background:rgba(169,92,66,.22);font-weight:700}.sr.ps{opacity:.5}
+.cur{font-size:18px;margin:8px 0 4px}.dep{text-align:center;margin:8px 0;padding:8px;border:1px dashed var(--bd);border-radius:12px}
+.qt{font:700 19px/1.9 Cairo,sans-serif;text-align:center;padding:12px 10px;min-height:110px;letter-spacing:.05px}.qt span{display:block;color:var(--p);font:700 30px/1.2 'Cormorant Garamond',serif}
+
+.section-subtitle{font:600 13px/1.8 Cairo,sans-serif;color:var(--m);margin:-5px 0 12px}
+.hero .orn{font-family:'Aref Ruqaa',serif;letter-spacing:5px}
+h2{letter-spacing:.1px}
+h2 .ic{box-shadow:inset 0 1px 0 rgba(255,255,255,.22)}
+button,select{transition:filter .18s ease,transform .18s ease,background .18s ease}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--p);outline-offset:2px}
+.card h2{padding-bottom:8px;border-bottom:1px solid var(--bd)}
+#dock{padding-bottom:max(7px,env(safe-area-inset-bottom))}
+.page-enter{animation:pageEnter .34s cubic-bezier(.2,.75,.25,1) both;transform-origin:50% 0}
+@keyframes pageEnter{from{opacity:0;transform:translateY(13px)}to{opacity:1;transform:translateY(0)}}
+.page-enter .card{animation:cardEnter .38s ease both}
+@keyframes cardEnter{from{opacity:.55;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.time-widget{position:relative;overflow:hidden;border:1px solid var(--bd);border-radius:20px;padding:14px;margin:12px 0;background:linear-gradient(135deg,rgba(217,136,108,.18),rgba(169,92,66,.055));box-shadow:var(--sh)}
+.time-widget:after{content:'◷';position:absolute;left:8px;top:-22px;font:130px/1 'Cormorant Garamond',serif;color:var(--p);opacity:.09;pointer-events:none}
+.tw-top{display:flex;align-items:center;justify-content:space-between;gap:8px;position:relative;z-index:1}
+.tw-time{font:700 clamp(34px,10vw,48px)/1.2 Inter,system-ui,sans-serif;letter-spacing:1px;color:var(--p);direction:ltr;text-align:center;margin:8px 0 2px;font-variant-numeric:tabular-nums}
+.tw-date{text-align:center;color:var(--m);font-size:13px;position:relative;z-index:1}
+.tw-progress{height:7px;background:rgba(127,127,127,.2);border-radius:9px;overflow:hidden;margin:10px 0 5px;position:relative;z-index:1}
+.tw-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--p),var(--p2));border-radius:9px;transition:width .5s}
+.tw-foot{display:flex;justify-content:space-between;gap:8px;color:var(--m);font-size:11px;position:relative;z-index:1}
+.tw-actions{display:flex;gap:6px;justify-content:center;position:relative;z-index:1}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style></head><body>
+<div class="side-watermark" aria-hidden="true">MOHAMED SALAH</div><div id="sc"><main>
+<div class="top"><div class="wm"><span id="lg"></span><span id="wmn">❖ Mohamed Salah ❖</span></div><div class="r" style="margin:0"><span class="sv" id="svb">✓ تم الحفظ تلقائياً</span><button onclick="thm()">🌓</button></div></div>
+<div class="hero"><h1 id="gr"></h1><div id="dt"></div><div class="orn">❖</div></div>
+<div id="app"></div>
+</main></div><nav id="dock"></nav>
+<div id="clk"></div><div id="sm"></div><div id="toast"></div>
+<script>
+const K='jlos',lk=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10),T=lk(new Date()),$=s=>document.querySelector(s),v=id=>(document.getElementById(id)||{}).value||'';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let S={};try{S=JSON.parse(localStorage.getItem(K))||{}}catch(e){}
+S=Object.assign({tasks:[],lect:[],budget:3000,exp:[],pomo:{},focus:{},xp:0,coffee:{},mood:{},water:{},supp:{},people:[],ideas:[],subs:[],wallet:[],team:[],chal:[],prio:[],pin:'',theme:'dark',nt:'',ex:[],pf:25,hab:[],th:'auto',ah1:6,ah2:18,mem:[],rg:7,trip:null,nm:'محمد',wm:'Mohamed Salah',acc:'',zm:1,orn:1,blur:1,snd:1,vib:1,pb:5,wg:3000,wz:250,mps:2,mtr:5,mw:3,hij:1,gdt:1,gl:1,hid:{},origin:'منيل شيحة، الجيزة، مصر',favs:[]},S);
+function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',2200)}
+const idb=()=>new Promise((r,j)=>{try{const q=indexedDB.open('jlos',1);q.onupgradeneeded=()=>q.result.createObjectStore('f',{keyPath:'id'});q.onsuccess=()=>r(q.result);q.onerror=()=>j()}catch(e){j()}});
+async function dbp(o){try{const d=await idb();return await new Promise(r=>{const q=o(d.transaction('f','readwrite').objectStore('f'));q.onsuccess=()=>r(q.result);q.onerror=()=>r(null)})}catch(e){return null}}
+let snT=0;
+function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}const b=$('#svb');if(b){b.style.opacity=1;setTimeout(()=>b.style.opacity=.6,900)}clearTimeout(snT);snT=setTimeout(()=>dbp(t=>t.put({id:'snap',k:'snap',data:JSON.stringify(S)})),3000)}
+function up(k){const e=document.getElementById('b'+k);if(e)e.innerHTML=C[k][2]()}
+function sv(k){save();up(k);if(k!=1)up(1);if(k==9)up(26);if(k==26)up(9)}
+async function ntfAsk(){if(!('Notification'in window))return toast('المتصفح لا يدعم الإشعارات');try{const p=await Notification.requestPermission();updateNtStatus();if(p==='granted'){await ntf('تم تفعيل إشعارات مساحتي بنجاح');toast('الإشعارات اتفعلت على الجهاز')}else toast('الإشعارات لسه مش مفعّلة. راجع إعدادات الموقع أو التطبيق')}catch(e){toast('تعذر طلب إذن الإشعارات من المتصفح')}}
+async function ntf(t){try{if(!('Notification'in window)||Notification.permission!=='granted')return false;if('serviceWorker'in navigator){const reg=await navigator.serviceWorker.ready;if(reg&&reg.showNotification){await reg.showNotification('مساحتي',{body:t,icon:'./apple-touch-icon.png',badge:'./apple-touch-icon.png',tag:'puh-'+Date.now(),renotify:false});return true}}new Notification('مساحتي',{body:t});return true}catch(e){return false}}
+function updateNtStatus(){const e=$('#ntStatus');if(!e)return;const p=('Notification'in window)?Notification.permission:'unsupported';e.textContent=p==='granted'?'الإشعارات مفعّلة على المتصفح':p==='denied'?'الإشعارات مرفوضة من إعدادات المتصفح':'الإشعارات لم يتم تفعيلها بعد'}
+function checkSubReminders(){if(!S.subs||!S.subs.length||!('Notification'in window)||Notification.permission!=='granted')return;const now=new Date(),today=new Date(now.getFullYear(),now.getMonth(),now.getDate());S.ntSent=S.ntSent||{};let changed=false;S.subs.forEach(x=>{const requested=Math.max(1,Math.min(31,+x.d||1));const makeDue=(offset)=>{const first=new Date(now.getFullYear(),now.getMonth()+offset,1),last=new Date(first.getFullYear(),first.getMonth()+1,0).getDate();return new Date(first.getFullYear(),first.getMonth(),Math.min(requested,last))};let due=makeDue(0);if(due<today)due=makeDue(1);const days=Math.round((due-today)/86400000),key=String(x.n)+'-'+due.toISOString().slice(0,10);if(days<=2&&!S.ntSent[key]){S.ntSent[key]=1;changed=true;ntf(days===0?'ميعاد تجديد '+x.n+' النهارده':'فاضل '+days+' يوم على تجديد '+x.n)}});if(changed)save()}
+function beep(){if(S.snd===0)return;try{const a=new(window.AudioContext||webkitAudioContext)(),o=a.createOscillator();o.connect(a.destination);o.frequency.value=880;o.start();setTimeout(()=>{o.stop();a.close()},400)}catch(e){}}
+function thm(){S.th=S.th=='auto'?'dark':S.th=='dark'?'light':'auto';cfg();save();toast({auto:'الوضع: تلقائي حسب الوقت',dark:'الوضع: داكن',light:'الوضع: فاتح'}[S.th])}
+function cp(t){try{navigator.clipboard.writeText(t).then(()=>toast('تم النسخ ✅'),fb)}catch(e){fb()}function fb(){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');toast('تم النسخ ✅')}catch(e){}a.remove()}}
+function dl(n,t){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/plain'}));a.download=n;a.click()}
+const fm=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+const mon=T.slice(0,7),rem=()=>S.budget-S.exp.filter(e=>e.d.slice(0,7)==mon).reduce((a,b)=>a+b.a,0);
+const dim=()=>{const d=new Date();return[new Date(d.getFullYear(),d.getMonth()+1,0).getDate(),d.getDate()]};
+const C={};
+function dAgo(n){const d=new Date();d.setDate(d.getDate()-n);return d}
+function dts(d){return[d.toLocaleDateString('ar-EG-u-ca-gregory',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' م',d.toLocaleDateString('ar-SA-u-ca-islamic-umalqura',{day:'numeric',month:'long',year:'numeric'})]}
+function waOpen(t){window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank')}
+const TR=['الشهداء','السادات','العتبة','جمال عبد الناصر'];
+// 1 command
+function goQ(p,f){show(p);setTimeout(()=>{const e=$('#'+f);e&&e.focus()},60)}
+C[1]=['h','✦ نظرة عامة',()=>{
+ const spent=S.exp.filter(e=>e.d==T).reduce((a,b)=>a+(+b.a||0),0);
+ const remaining=(+S.budget||0)-S.exp.filter(e=>e.d.slice(0,7)==mon).reduce((a,b)=>a+(+b.a||0),0);
+ const fav=(S.favs||[]).slice(0,3).map(n=>PLACES.find(p=>p.n===n)).filter(Boolean);
+ return `<div class=nx><div class=page-kicker>PERSONAL UTILITY HUB</div><div style="font:700 22px/1.6 'Aref Ruqaa',Cairo,serif">كل أدواتك اليومية في مكان واحد</div><small>اختار القسم اللي محتاجه وابدأ مباشرة.</small></div>
+ <div class=tiles><div><i>💸</i><b>${spent}</b>مصروف اليوم (جنيه)</div><div><i>◈</i><b>${remaining}</b>المتبقي من الميزانية (جنيه)</div></div>
+ <div class=time-widget><div class=tw-top><b>⌚ الوقت الآن</b><span class=chip id=tw-daypart>—</span></div><div class=tw-time id=tw-time>--:--:--</div><div class=tw-date id=tw-date>جارٍ تحميل التاريخ…</div><div class=tw-progress><i id=tw-progress></i></div><div class=tw-foot><span id=tw-left>—</span><span id=tw-percent>—</span></div><div class=tw-actions><button onclick=toggleClockSeconds() id=tw-format>إخفاء الثواني</button><button onclick=liveTick()>تحديث الوقت</button></div></div>
+ <div class=qa><button class=f onclick="show('d')">اكتشف خروجات القاهرة</button><button onclick="show('r')">🚇 مترو القاهرة</button><button onclick="show('m')">💰 أموالي</button><button onclick="show('p');setTimeout(()=>$('#b18')?.scrollIntoView({behavior:'smooth',block:'start'}),50)">تقسيم الفاتورة</button><button onclick="show('w')">مساحة الفريق</button><button onclick="show('p')">أدواتي الشخصية</button></div>
+ <div class=orn>✦ الأماكن المحفوظة</div>
+ ${fav.length?fav.map(p=>`<div class=place-card><div class=place-thumb>${placeIcon(p.c)}</div><div><h3>${esc(p.n)}</h3><p>${esc(p.area)}</p><div class=place-actions><button class=f onclick="dOpenByName('${esc(p.n)}')">التفاصيل</button></div></div></div>`).join(''):'<p class=em>احفظ الأماكن اللي تعجبك من قسم اكتشف القاهرة وهتظهر هنا.</p>'}
+ <div class=orn>✦ الوصول السريع</div><p class=tip>الموقع الافتراضي للاتجاهات: ${esc(S.origin||'منيل شيحة، الجيزة، مصر')}.</p>`;
+}];
+// Removed: traditional task manager and productivity analytics.
+// Removed: traditional task manager and productivity analytics.
+// Productivity analytics removed.
+// 4 team
+const ST3=[['⏳','انتظار','#9e9e9e'],['🔧','جارٍ','#ff9800'],['✅','منجز','#4caf50']];
+function tmWa(i){const w=i<0?undefined:S.mem[i],p=S.team.filter(t=>t.st<2&&(w===undefined||t.w==w));if(!p.length)return toast('لا توجد مهام معلّقة');const m='السلام عليكم'+(w?' '+w:' جميعاً')+'،\nمتابعة للمهام المتبقية:\n'+p.map(t=>'• '+t.n+(w===undefined&&t.w?' ('+t.w+')':'')+(t.due?' — الموعد '+t.due:'')).join('\n')+'\nيرجى إفادتي بمستجداتها. شكراً لكم 🙏';waOpen(m);cp(m)}
+function tmAdd(){const n=v('tmn').trim();if(!n)return;S.team.push({n,w:v('tmw'),st:0,due:v('tmd')});sv(4)}
+function tmMem(){const n=v('tmm').trim();if(n&&!S.mem.includes(n)){S.mem.push(n);sv(4)}}
+function tmDel(i){const m=S.mem[i];S.mem.splice(i,1);S.team.forEach(t=>{if(t.w==m)t.w=''});sv(4)}
+C[4]=['w','🗂 مساحة الفريق',()=>{const L=S.team.length,c=[0,1,2].map(i=>S.team.filter(t=>t.st==i).length),pc=L?Math.round(c[2]/L*100):0,gs=[...S.mem.map((m,i)=>[m,i]),...(S.team.some(t=>!t.w)?[['',-1]]:[])];
+return `<div class=r><b style="font:800 30px Inter,system-ui,sans-serif;color:var(--p)">${pc}%</b><div class=pb><i style="width:${pc}%"></i></div></div><div class=tiles style="grid-template-columns:repeat(3,1fr)">${ST3.map((x,i)=>`<div><i>${x[0]}</i><b>${c[i]}</b>${x[1]}</div>`).join('')}</div>${!L&&!S.mem.length?'<p class=em>ابدأ بإضافة أعضاء الفريق ثم وزّع عليهم المهام.</p>':''}`
++gs.map(([m,mi])=>{const ts=S.team.map((t,i)=>[t,i]).filter(([t])=>(t.w||'')==m),dn=ts.filter(([t])=>t.st==2).length;return `<div class=grp><div class=r style="margin-top:0"><b style="flex:1">${m?'👤 '+esc(m):'📎 بدون مسؤول'} <small>${dn}/${ts.length}</small></b>${m?`<button class=x onclick="tmWa(${mi})">📲</button><button class=x onclick="tmDel(${mi})">✕</button>`:''}</div>${ts.map(([t,i])=>`<div class=r><button style="border-color:${ST3[t.st][2]};padding:4px 10px;font-size:13px" onclick="S.team[${i}].st=(S.team[${i}].st+1)%3;sv(4)">${ST3[t.st][0]} ${ST3[t.st][1]}</button><span style="flex:1;${t.st==2?'text-decoration:line-through;opacity:.6':''}">${esc(t.n)}${t.due?` <small style="${t.st<2&&t.due<T?'color:#e53935':''}">${t.due}</small>`:''}</span><button class=x onclick="S.team.splice(${i},1);sv(4)">✕</button></div>`).join('')}</div>`}).join('')
++`<div class=r><input id=tmm placeholder="اسم عضو جديد"><button onclick="tmMem()">＋ عضو</button></div><div class=r><input id=tmn placeholder="مهمة جديدة"><select id=tmw><option value="">بدون مسؤول</option>${S.mem.map(m=>`<option>${esc(m)}</option>`).join('')}</select></div><div class=r><input id=tmd type=date><button class=f onclick="tmAdd()">＋ إضافة مهمة</button><button onclick="tmWa(-1)">📲 متابعة جماعية</button></div>`}];
+// 5 metro
+const ML={
+'الخط الأول':'حلوان،عين حلوان،جامعة حلوان،وادي حوف،حدائق حلوان،المعصرة،طرة الأسمنت،كوتسيكا،طرة البلد،ثكنات المعادي،المعادي،حدائق المعادي،دار السلام،الزهراء،مار جرجس،الملك الصالح،السيدة زينب،سعد زغلول،السادات،جمال عبد الناصر،أحمد عرابي،الشهداء،غمرة،الدمرداش،منشية الصدر،كوبري القبة،حمامات القبة،سراي القبة،حدائق الزيتون،حلمية الزيتون،المطرية،عين شمس،عزبة النخل،المرج،المرج الجديدة',
+'الخط الثاني':'المنيب،ساقية مكي،ضواحي الجيزة،الجيزة،فيصل،جامعة القاهرة،البحوث،الدقي،الأوبرا،السادات،محمد نجيب،العتبة،الشهداء،مسرة،روض الفرج،سانت تريزا،الخلفاوي،المظلات،كلية الزراعة،شبرا الخيمة',
+'الخط الثالث':[
+'عدلي منصور،الهايكستب،عمر بن الخطاب،قباء،هشام بركات،النزهة،نادي الشمس،ألف مسكن،هليوبوليس،هارون،الأهرام،كلية البنات،الاستاد،أرض المعارض،العباسية،عبده باشا،الجيش،باب الشعرية،العتبة،جمال عبد الناصر،ماسبيرو،صفاء حجازي،الكيت كات،السودان،إمبابة،البوهي،القومية العربية،الطريق الدائري،محور روض الفرج',
+'عدلي منصور،الهايكستب،عمر بن الخطاب،قباء،هشام بركات،النزهة،نادي الشمس،ألف مسكن،هليوبوليس،هارون،الأهرام،كلية البنات،الاستاد،أرض المعارض،العباسية،عبده باشا،الجيش،باب الشعرية،العتبة،جمال عبد الناصر،ماسبيرو،صفاء حجازي،الكيت كات،التوفيقية،وادي النيل،جامعة الدول العربية،بولاق الدكرور،جامعة القاهرة'
+]};
+const lineSegments=st=>Array.isArray(st)?st:[st];
+const lineStations=st=>[...new Set(lineSegments(st).flatMap(x=>x.split('،')))];
+const MN=[...new Set(Object.values(ML).flatMap(lineStations))];
+function mGraph(){
+ const g={},by={},ad=(x,y,w)=>{(g[x]=g[x]||[]).push([y,w]);(g[y]=g[y]||[]).push([x,w])};
+ Object.entries(ML).forEach(([l,st])=>lineSegments(st).forEach(seg=>{
+  const a=seg.split('،');
+  a.forEach((n,i)=>{const node=l+'|'+n;(by[n]=by[n]||[]).push(node);if(i)ad(l+'|'+a[i-1],node,S.mps||2)});
+ }));
+ Object.keys(by).forEach(n=>by[n]=[...new Set(by[n])]);
+ Object.values(by).forEach(a=>{for(let i=0;i<a.length;i++)for(let j=i+1;j<a.length;j++)ad(a[i],a[j],S.mtr||5)});
+ return[g,by]
+}
+function mPath(a,b){const[g,by]=mGraph();if(!by[a]||!by[b]||a==b)return null;const d={},p={},q=new Set(by[a]),dn=new Set();by[a].forEach(x=>d[x]=0);while(q.size){let u=null;q.forEach(x=>{if(u===null||d[x]<d[u])u=x});q.delete(u);if(dn.has(u))continue;dn.add(u);for(const[y,w]of g[u]){if(d[y]===undefined||d[u]+w<d[y]){d[y]=d[u]+w;p[y]=u;q.add(y)}}}let e=null;by[b].forEach(x=>{if(d[x]!==undefined&&(e===null||d[x]<d[e]))e=x});if(e===null)return null;const r=[];while(e){r.unshift(e);e=p[e]}return r}
+function mkOpts(ph){return `<option value="">${ph}</option>`+Object.entries(ML).map(([l,st])=>`<optgroup label="${l}">${lineStations(st).map(n=>`<option value="${n}">${n}</option>`).join('')}</optgroup>`).join('')}
+function mRt(a,b){const R=mPath(a,b);if(!R)return null;const ms=S.mps||2,mt=S.mtr||5,mw=S.mw||3;let c=0,cnt=0,tr=0;const nodes=R.map((x,i)=>{const[l,n]=x.split('|');let tf=0;if(i){const pn=R[i-1].split('|')[1];if(pn==n){tr++;c+=mt;tf=1}else{cnt++;c+=ms}}return{n,l,t:c,tf}});return{nodes,cnt,tr,stationCount:cnt+1,tot:c+mw,mw}}
+let MR=null,TRP=null,mls=0,mdn=0;
+function mSw(){const x=v('ma');$('#ma').value=v('mb');$('#mb').value=x;mPlan()}
+function mPlan(){const a=v('ma'),b=v('mb'),e=$('#mres');S.ma=a;S.mb=b;save();if(!e)return;MR=null;if(!a||!b){e.innerHTML='<p class=em>اختر محطة الانطلاق ومحطة الوصول لتظهر تفاصيل الرحلة.</p>';return}const R=mRt(a,b);if(!R){e.innerHTML='<p class=em>اختر محطتين مختلفتين.</p>';return}MR=R;const ms=S.mps||2,mt=S.mtr||5;
+e.innerHTML=`<p class=em>المسار محسوب من شبكة المحطات؛ الزمن تقديري وليس تتبعًا لحظيًا للقطارات.</p><div class=tiles style="grid-template-columns:repeat(3,1fr)"><div><b>${R.stationCount}</b>محطة</div><div><b>${R.tr}</b>تبديل</div><div><b>${R.tot}</b>دقيقة</div></div><p class=em>الزمن = (${R.cnt} × ${ms}) + (${R.tr} × ${mt}) + ${R.mw} انتظار</p><div class=r><label style="flex:1"><small>أريد الوصول الساعة (اختياري)</small><input id=mt type=time value="${S.mt||''}" onchange="S.mt=this.value;save();mdn=0;mDep()"></label></div><div id=mdp class=dep></div><button class=f style="width:100%;font-size:17px" onclick="mStart()">▶ ابدأ الرحلة الآن</button><details><summary>تفاصيل المسار</summary>${R.nodes.map((n,i)=>`<div class=r><span style="flex:1">${!i?'🚉 '+n.n+' <small>('+n.l+')</small>':n.tf?'🔁 تبديل إلى '+n.l+' في '+n.n:'⬇ '+n.n}</span><span class=chip>${n.t} د</span></div>`).join('')}</details>`;mDep()}
+function mDep(){const e=$('#mdp');if(!e)return;if(!MR){e.innerHTML='';return}if(!S.mt){e.innerHTML='<small>حدّد ساعة الوصول لمعرفة موعد التحرك، أو ابدأ فوراً.</small>';return}const[h,m]=S.mt.split(':'),t=new Date();t.setHours(+h,+m-MR.tot-10,0,0);const d=Math.round((t-Date.now())/1000);e.innerHTML=d>0?`🕒 تحرّك الساعة <b>${t.toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'})}</b> — بعد <b>${d>3600?Math.floor(d/3600)+'س ':''}${fm(d%3600)}</b>`:'🏃 <b>حان وقت التحرك الآن!</b>';if(d<=0&&!mdn){mdn=1;ntf('حان وقت التحرك إلى المترو 🚇')}if(d>0)mdn=0}
+function mStart(){if(!MR)return toast('اختر المحطتين أولاً');S.trip={t0:Date.now(),a:S.ma,b:S.mb,pausedAt:0,pausedTotal:0};TRP=null;save();up(5);try{if(window.Notification&&Notification.permission=='default')Notification.requestPermission()}catch(e){}}
+function mPause(){if(!S.trip||S.trip.pausedAt)return;S.trip.pausedAt=Date.now();save();up(5)}
+function mResume(){if(!S.trip||!S.trip.pausedAt)return;S.trip.pausedTotal=(S.trip.pausedTotal||0)+(Date.now()-S.trip.pausedAt);S.trip.pausedAt=0;save();up(5)}
+function mEnd(){S.trip=null;TRP=null;save();up(5)}
+function mTrip(){const tr=S.trip,e=$('#mtv');if(!tr||!e)return;if(!TRP||TRP.k!=tr.t0)TRP={k:tr.t0,R:mRt(tr.a,tr.b)};const R=TRP.R;if(!R){S.trip=null;save();return}const now=Date.now(),elapsedMs=now-tr.t0-(tr.pausedTotal||0)-(tr.pausedAt?now-tr.pausedAt:0),el=Math.max(0,elapsedMs/6e4),rem=R.tot-el;
+if(rem<=0&&!tr.pausedAt){S.trip=null;save();ntf('وصلت إلى وجهتك 🎉');beep();toast('وصلت إلى وجهتك 🎉');up(5);return}
+const m=el-R.mw;let i=0;if(m>=0)R.nodes.forEach((n,j)=>{if(n.t<=m)i=j});const cu=R.nodes[i],nx=R.nodes[i+1],a0=Math.max(0,i-1);
+const row=(n,j)=>`<div class="r sr ${j==i?'cu':j<i?'ps':''}"><span style="flex:1">${j==i?'📍 ':j<i?'✓ ':'• '}${n.tf?'تبديل إلى '+n.l+' في '+esc(n.n):esc(n.n)}</span><small>${n.t} د</small></div>`;
+e.innerHTML=`<div class=r style="justify-content:space-between"><b>${esc(tr.a)} ← ${esc(tr.b)}</b><button onclick="mEnd()">إنهاء الرحلة</button></div><div class=r>${tr.pausedAt?'<button class=f onclick="mResume()">▶ استكمال الرحلة</button>':'<button onclick="mPause()">Ⅱ إيقاف مؤقت</button>'}<small>${tr.pausedAt?'المؤقت متوقف مؤقتًا':'المؤقت يعمل'}</small></div><div class=big>${fm(Math.ceil(rem*60))}</div><div class=pb><i style="width:${Math.min(100,el/R.tot*100)}%"></i></div><p class=cur>${m<0?'⏳ في انتظار القطار في محطة <b>'+esc(cu.n)+'</b>':'📍 أنت الآن في محطة <b>'+esc(cu.n)+'</b> <small>('+cu.l+')</small>'}</p>${nx?`<small>التالية: ${nx.tf?'تبديل إلى '+nx.l+' في '+esc(nx.n):esc(nx.n)} بعد ${Math.max(0,Math.ceil(nx.t-Math.max(m,0)))} د</small>`:''}<div>${R.nodes.slice(a0,i+6).map((n,j)=>row(n,j+a0)).join('')}</div>${R.nodes.length>i+6?`<small>… و${R.nodes.length-i-6} محطة أخرى</small>`:''}`}
+function mQ(){const n=+v('mn'),q=+v('mq')||0,ms=S.mps||2,mt=S.mtr||5,mw=S.mw||3,e=$('#mqr');if(e)e.innerHTML=n>0?`<div class=big>${n*ms+q*mt+mw} د</div><p class=em>(${n} × ${ms}) + (${q} × ${mt}) + ${mw} انتظار</p>`:''}
+function mAfter(){if(S.trip){mls=0;mTick();return}if(!$('#ma'))return;$('#ma').value=S.ma||'';$('#mb').value=S.mb||'';mPlan()}
+function mTick(){const x=Math.floor(Date.now()/1000);if(x==mls)return;mls=x;S.trip?mTrip():mDep()}
+C[5]=['r','🚇 مترو القاهرة',()=>{setTimeout(mAfter);return S.trip?'<div id=mtv></div>':`<div class=metro-brand><svg class=metro-mark viewBox="0 0 64 64" aria-label="Metro"><rect x="8" y="5" width="48" height="48" rx="15" fill="none" stroke="var(--p)" stroke-width="4"/><path d="M19 42V21h7l6 11 6-11h7v21M22 50l-5 7m25-7 5 7" fill="none" stroke="var(--p)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="23" cy="44" r="2.5" fill="var(--p)"/><circle cx="41" cy="44" r="2.5" fill="var(--p)"/></svg><div style="flex:1"><b style="font:700 18px 'Reem Kufi',Cairo">مخطط مترو القاهرة</b><div class=page-kicker>اختار محطتين واعرف المسار والتبديلات</div></div><span class=chip>٣ خطوط</span></div><div class=metro-line><b>الخط الأول</b><i></i><small>حلوان ↔ المرج الجديدة</small></div><div class=metro-line><b>الخط الثاني</b><i></i><small>شبرا الخيمة ↔ المنيب</small></div><div class=metro-line><b>الخط الثالث</b><i></i><small>عدلي منصور ↔ فرعين</small></div><div class=r><select id=ma onchange="mPlan()" style="flex:1;min-width:0">${mkOpts('محطة الانطلاق')}</select><button onclick="mSw()">⇄</button><select id=mb onchange="mPlan()" style="flex:1;min-width:0">${mkOpts('محطة الوصول')}</select></div><div id=mres></div><div class=place-route><small>ملاحظة</small><div>حساب الوقت داخل التطبيق تقديري وليس بيانات لحظية عن حركة القطارات.</div><a href="https://www.mobilitycairo.com/en/travel-information/travel-guide" target="_blank" rel="noopener">مواعيد ومعلومات تشغيل الخط الثالث</a></div><div class=r><button onclick="window.open('https://www.metromisr.com/map/','_blank','noopener')">خريطة المترو التفاعلية ↗</button></div><details><summary>حساب سريع بعدد المحطات</summary><div class=r><input id=mn type=number min=1 inputmode=numeric placeholder="عدد المحطات" oninput="mQ()"><input id=mq type=number min=0 inputmode=numeric placeholder="عدد التبديلات" oninput="mQ()"></div><div id=mqr></div></details>`}];
+// 6 rewards
+// XP rewards removed.
+// 7 people
+C[7]=['p','👨‍👩‍👧 الأهل والأصدقاء',()=>{const L=S.people.map((p,i)=>[p,i,p.l?Math.floor((new Date(T)-new Date(p.l))/864e5):999]).sort((a,b)=>b[2]-a[2]);return `${L.length?'':'<p class=em>أضف من تحرص على التواصل معهم، وسيتغيّر لون البطاقة كلما طالت المدة.</p>'}${L.map(([p,i,d])=>{const f=p.f||7,c=d<=f?'#4caf50':d<=f*2?'#ff9800':'#e53935';return `<div class=r style="border-inline-start:5px solid ${c};padding:6px 10px;background:rgba(127,127,127,.07);border-radius:12px"><span style="flex:1">${esc(p.n)}<br><small>${d>900?'لم يُسجَّل تواصل بعد':'آخر تواصل منذ '+d+' يوم'} · الهدف كل ${f} يوم</small></span><button onclick="S.people[${i}].l=T;sv(7)">تواصلت ✓</button><button class=x onclick="S.people.splice(${i},1);sv(7)">✕</button></div>`}).join('')}<div class=r><input id=pn placeholder="الاسم"><input id=pf2 type=number placeholder="كل كم يوم؟" style="max-width:110px;flex:none"><button class=f onclick="if(v('pn')){S.people.push({n:v('pn'),l:'',f:+v('pf2')||7});sv(7)}">＋</button></div>`}];
+// 8 coffee & mood
+C[8]=['p','☕ القهوة والمزاج',()=>`<div class=big>${S.coffee[T]||0} ☕</div><div class=r style="justify-content:center"><button onclick="S.coffee[T]=Math.max(0,(S.coffee[T]||0)-1);sv(8)">－ إنقاص</button><button class=f onclick="S.coffee[T]=(S.coffee[T]||0)+1;sv(8)">＋ فنجان</button></div><div class=r style="justify-content:center">${[['🔥','أقصى طاقة'],['⚡','متوازن'],['☕','هادئ']].map(m=>`<button class="${S.mood[T]==m[0]?'f':''}" onclick="S.mood[T]='${m[0]}';sv(8)">${m[0]} ${m[1]}</button>`).join('')}</div>`];
+// 9 expenses
+const CT=[['🚇','مواصلات'],['🍽','طعام'],['☕','مشروبات'],['📱','اتصالات'],['🧴','مستلزمات'],['🛍','أخرى']];let ec='طعام';
+function selCat(c){ec=c;document.querySelectorAll('#b9 .cats button').forEach(b=>b.className=b.dataset.c==c?'f':'')}
+function exAdd(a){a=+a;if(!(a>0))return toast('أدخل مبلغاً صحيحاً');S.exp.push({a,l:ec,d:T});sv(9)}
+C[9]=['m','🧾 تسجيل المصروفات',()=>`<small>اختر البند ثم المبلغ</small><div class=cats>${CT.map(c=>`<button data-c="${c[1]}" class="${ec==c[1]?'f':''}" onclick="selCat('${c[1]}')">${c[0]}<br><small>${c[1]}</small></button>`).join('')}</div><div class=r>${[10,20,50,100].map(a=>`<button onclick="exAdd(${a})">${a}</button>`).join('')}</div><div class=r><input id=ea type=number inputmode=decimal placeholder="مبلغ آخر (ج)"><button class=f onclick="exAdd(v('ea'))">إضافة</button></div>${S.exp.length?'<small>آخر العمليات</small>':'<p class=em>لا توجد مصروفات بعد.</p>'}${S.exp.map((e,i)=>[e,i]).slice(-8).reverse().map(([e,i])=>`<div class=r><span style="flex:1">${(CT.find(c=>c[1]==e.l)||[])[0]||'💸'} ${esc(e.l)} <small>${e.d}</small></span><b>${e.a} ج</b><button class=x onclick="S.exp.splice(${i},1);sv(9)">✕</button></div>`).join('')}`];
+C[26]=['m','📊 ملخص أموالي',()=>{const[n,d]=dim(),left=n-d+1,mx=S.exp.filter(e=>e.d.slice(0,7)==mon),sp=mx.reduce((a,b)=>a+b.a,0),R=S.budget-sp,pct=S.budget?Math.min(100,Math.round(sp/S.budget*100)):0,td=S.exp.filter(e=>e.d==T).reduce((a,b)=>a+b.a,0),cats={};mx.forEach(e=>cats[e.l]=(cats[e.l]||0)+e.a);const top=Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,4);
+return `<div class=big>${R} <small>ج متبقٍ</small></div><div class=pb><i style="width:${pct}%;${pct>85?'background:#e53935':''}"></i></div><p class=em>أنفقت ${sp} من ${S.budget} (${pct}%)</p><div class=tiles><div><i>📅</i><b>${Math.max(0,Math.floor(R/left))}</b>الحدّ اليومي المقترح (ج)</div><div><i>🧾</i><b>${td}</b>أنفقته اليوم (ج)</div></div>${top.length?'<small>أكثر البنود إنفاقاً هذا الشهر</small>'+top.map(([l,a])=>`<div class=r><span style="width:90px">${esc(l)}</span><div class=pb><i style="width:${a/sp*100}%"></i></div><small style="width:40px">${a}</small></div>`).join(''):''}<div class=r><label style="flex:1"><small>الميزانية الشهرية (ج)</small><input type=number value=${S.budget} onchange="S.budget=+this.value||0;sv(26)"></label></div>`}];
+// 10 ideas
+C[10]=['p','💡 دفتر الأفكار',()=>`<div class=r><input id=ie placeholder="دوّن فكرتك"><button class=f onclick="if(v('ie')){S.ideas.unshift({t:v('ie'),d:T});sv(10)}">＋</button></div>${S.ideas.map((x,i)=>`<div class=r><span style="flex:1">${esc(x.t)} <small>${x.d}</small></span><button class=x onclick="S.ideas.splice(${i},1);sv(10)">✕</button></div>`).join('')}<button onclick="dl('ideas.txt',S.ideas.map(x=>x.d+' — '+x.t).join('\\n'))">⬇ تصدير</button>`];
+// 11 clocks
+let cm=0;
+const CK=['Flip','Chronograph','OLED','ساعة الشعار','عدّاد وتاريخ','Neon','رومانية'];
+function clk(m){cm=m;const o=$('#clk');o.style.display='flex';o.requestFullscreen&&o.requestFullscreen().catch(()=>{});o.onclick=()=>{o.style.display='none';document.fullscreenElement&&document.exitFullscreen()};cl()}
+function cl(){const o=$('#clk');if(o.style.display!='flex')return;const d=new Date(),p=n=>String(n).padStart(2,'0'),h=p(d.getHours()),m=p(d.getMinutes()),s=p(d.getSeconds()),ms=d.getMilliseconds(),sa=(d.getSeconds()+ms/1000)*6,ma=d.getMinutes()*6+d.getSeconds()/10,ha=(d.getHours()%12)*30+d.getMinutes()/2;
+const tkz=[...Array(60)].map((_,i)=>`<line y1=-90 y2=${i%5?-86:-80} stroke=#FDFBF7 stroke-width=${i%5?.6:2} transform="rotate(${i*6})"/>`).join(''),hands=c=>`<line y2=-50 stroke=#FDFBF7 stroke-width=4 stroke-linecap=round transform="rotate(${ha})"/><line y2=-75 stroke=#FDFBF7 stroke-width=3 stroke-linecap=round transform="rotate(${ma})"/><line y1=12 y2=-82 stroke=${c} stroke-width=1.5 transform="rotate(${sa})"/><circle r=4 fill=${c} />`,dial=x=>`<svg viewBox="-100 -100 200 200" style="width:min(90vw,78vh)"><circle r=96 fill=#111 stroke=#D9886C stroke-width=3 />${tkz}${x}</svg>`;
+let w;
+if(cm==0)w=`<div class=fl><span>${h[0]}</span><span>${h[1]}</span><em>:</em><span>${m[0]}</span><span>${m[1]}</span></div><h2>${s}</h2>`;
+else if(cm==1)w=dial(`<circle cy=-35 r=22 fill=none stroke=#A95C42 /><line y2=-18 stroke=#D9886C stroke-width=1.5 transform="translate(0 -35) rotate(${ms*.36})"/>`+hands('#e53935'));
+else if(cm==2)w=`<div class=oled>${h}:${m}</div><h2 style="color:#555">${s}</h2>`;
+else if(cm==3)w=dial(logo(38).replace('<svg ','<svg x=-19 y=-70 ')+hands('#D9886C'));
+else if(cm==4){const[g,hj]=dts(d);w=`<div class="fl sm"><span>${h[0]}</span><span>${h[1]}</span><em>:</em><span>${m[0]}</span><span>${m[1]}</span><em>:</em><span>${s[0]}</span><span>${s[1]}</span></div><div dir=rtl style="font:700 6vw/1.8 'Reem Kufi',Cairo,sans-serif;text-align:center;margin-top:3vh"><div>${g}</div><div style="color:#D9886C">${hj}</div></div>`}
+else if(cm==5)w=`<div style="font:800 24vw Inter,sans-serif;color:#D9886C;text-shadow:0 0 12px #D9886C,0 0 44px #A95C42">${h}:${m}</div><div style="width:70vw;height:6px;background:#2a1a14;border-radius:3px;margin-top:3vh"><i style="display:block;height:100%;width:${(d.getSeconds()+ms/1000)/60*100}%;background:#D9886C;box-shadow:0 0 12px #D9886C;border-radius:3px"></i></div>`;
+else w=dial(['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'].map((r,i)=>`<text x=${(70*Math.sin((i+1)*Math.PI/6)).toFixed(1)} y=${(-70*Math.cos((i+1)*Math.PI/6)).toFixed(1)} text-anchor=middle dominant-baseline=middle font-size=11 font-family=serif fill=#D9886C>${r}</text>`).join('')+hands('#D9886C'));
+o.innerHTML=w+'<small style="position:absolute;bottom:18px;color:#777">المس الشاشة للإغلاق</small>'}
+C[11]=['p','🕰 ساعاتي',()=>`<div class=r>${CK.map((n,i)=>`<button class=f onclick="clk(${i})">${n}</button>`).join('')}</div><small>اختر ساعة لعرضها بملء الشاشة، والمس الشاشة لإغلاقها.</small>`];
+// 12 habits
+// Habit streak tracker removed from this utility-focused version.
+// 13 subs
+function nxt(day){const d=new Date(),t=new Date(d.getFullYear(),d.getMonth(),day);if(t<new Date(d.getFullYear(),d.getMonth(),d.getDate()))t.setMonth(t.getMonth()+1);return Math.round((t-new Date(d.getFullYear(),d.getMonth(),d.getDate()))/864e5)}
+C[13]=['m','🔔 الاشتراكات والباقات',()=>{const L=S.subs.map((x,i)=>[x,i,nxt(x.d)]).sort((a,b)=>a[2]-b[2]),tot=S.subs.reduce((a,x)=>a+(+x.p||0),0);return `${S.subs.length?`<div class=tiles><div><i>🔔</i><b>${S.subs.length}</b>اشتراك</div><div><i>💳</i><b>${tot}</b>الإجمالي الشهري (ج)</div></div>`:'<p class=em>أضف باقاتك واشتراكاتك لتصلك تنبيهات التجديد.</p>'}${L.map(([x,i,d])=>`<div class=r><span class=dot style="background:${d<=3?'#e53935':d<=7?'#ff9800':'#4caf50'}"></span><span style="flex:1">${esc(x.n)}<br><small>التجديد يوم ${x.d} من الشهر${x.p?' · '+x.p+' ج':''}</small></span><span class=chip>${d==0?'اليوم':d+' يوم'}</span><button class=x onclick="S.subs.splice(${i},1);sv(13)">✕</button></div>`).join('')}<div class=r><input id=sn placeholder="اسم الاشتراك"><input id=sd type=number min=1 max=31 placeholder="يوم التجديد"><input id=sp2 type=number placeholder="المبلغ"><button class=f onclick="if(v('sn')&&+v('sd')){S.subs.push({n:v('sn'),d:+v('sd'),p:+v('sp2')||0});sv(13)}">＋</button></div>`}];
+// files
+async function fAdd(kind,inp,k){for(const f of inp.files)await dbp(t=>t.put({id:kind+Date.now()+Math.random(),k:kind,n:f.name,b:f}));fLoad(kind,k)}
+async function fLoad(kind,k){const all=await dbp(t=>t.getAll())||[],box=$('#f'+k);if(!box)return;box.innerHTML='';all.filter(r=>r.k==kind).forEach(r=>{const u=URL.createObjectURL(r.b),e=document.createElement('div');e.className='fi';e.innerHTML=r.b.type.startsWith('video')?`<video src="${u}" controls></video>`:r.b.type.startsWith('image')?`<img src="${u}">`:`<a href="${u}" download="${esc(r.n)}">${esc(r.n)}</a>`;const b=document.createElement('button');b.textContent='✕';b.onclick=async()=>{await dbp(t=>t.delete(r.id));fLoad(kind,k)};e.appendChild(b);box.appendChild(e)})}
+// 14 wallet
+C[14]=['m','🪪 البطاقات والوثائق',()=>{setTimeout(()=>fLoad('w',14));return `${S.wallet.map((w,i)=>`<div class=r><span style="flex:1">${esc(w.l)}: <b dir=ltr>${esc(w.v)}</b></span><button onclick="cp(S.wallet[${i}].v)">نسخ</button><button class=x onclick="S.wallet.splice(${i},1);sv(14)">✕</button></div>`).join('')}<div class=r><input id=wl placeholder="العنوان (الرقم القومي…)"><input id=wv placeholder="الرقم"><button class=f onclick="if(v('wl')&&v('wv')){S.wallet.push({l:v('wl'),v:v('wv')});sv(14)}">＋</button></div><input type=file accept="image/*,.pdf" multiple onchange="fAdd('w',this,14)"><div id=f14></div><small>تُحفظ الصور على جهازك فقط</small>`}];
+// 15 vault
+let vu=0;
+async function hh(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('jl'+s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+async function vPin(){const p=v('vp');if(p.length<4)return toast('أربعة أرقام على الأقل');const h=await hh(p);if(!S.pin){S.pin=h;vu=1;save();up(15)}else if(h==S.pin){vu=1;up(15)}else toast('الرمز غير صحيح')}
+C[15]=['p','🔐 الخزنة الخاصة',()=>{if(!vu)return `<div class=r><input id=vp type=password inputmode=numeric placeholder="${S.pin?'أدخل رمز PIN':'أنشئ رمز PIN جديداً'}"><button class=f onclick="vPin()">${S.pin?'افتح':'احفظ'}</button></div>`;setTimeout(()=>fLoad('v',15));return `<input type=file accept="image/*,video/*" multiple onchange="fAdd('v',this,15)"><div id=f15></div><button onclick="vu=0;up(15)">🔒 إغلاق</button>`}];
+// 16 equalizer
+let ac,fl=[],an;
+const PR={Flat:[0,0,0],'Bass Boost':[10,0,0],Vocal:[-3,5,2],'مهرجانات':[11,-2,6],Treble:[-2,0,9],Rock:[5,-2,4],Pop:[-1,3,3],Jazz:[3,1,3],Club:[7,1,5],Soft:[2,0,-4],Speech:[-4,4,3]};
+function eqInit(){if(ac)return;const au=$('#au');ac=new(window.AudioContext||webkitAudioContext)();const s=ac.createMediaElementSource(au);fl=[['lowshelf',100],['peaking',1000],['highshelf',8000]].map(([t,f])=>{const b=ac.createBiquadFilter();b.type=t;b.frequency.value=f;return b});an=ac.createAnalyser();an.fftSize=128;s.connect(fl[0]);fl[0].connect(fl[1]);fl[1].connect(fl[2]);fl[2].connect(an);an.connect(ac.destination);draw()}
+function draw(){const c=$('#cv');if(!c||!an)return;const x=c.getContext('2d'),d=new Uint8Array(an.frequencyBinCount);an.getByteFrequencyData(d);x.clearRect(0,0,c.width,c.height);const w=c.width/d.length;x.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--p');d.forEach((q,i)=>x.fillRect(i*w,c.height-q*c.height/255,w-1,q*c.height/255));requestAnimationFrame(draw)}
+function eqSet(a){eqInit();a.forEach((g,i)=>{$('#e'+i).value=g;fl[i].gain.value=g})}
+C[16]=['p','🎚 موازن الصوت',()=>`<input type=file accept="audio/*" onchange="$('#au').src=URL.createObjectURL(this.files[0]);$('#au').play()"><audio id=au controls style="width:100%" onplay="eqInit();ac.resume()"></audio><canvas id=cv width=300 height=100></canvas>${['Bass','Mid','Treble'].map((n,i)=>`<div class=r><span style="width:60px">${n}</span><input id=e${i} type=range min=-12 max=12 value=0 oninput="eqInit();fl[${i}].gain.value=this.value"></div>`).join('')}<div>${Object.keys(PR).map(k=>`<button class=chip onclick='eqSet(PR["${k}"])'>${k}</button>`).join('')}</div>`];
+// 18 split
+function spl(){const t=+v('st')||0,n=Math.max(1,+v('sp')||1),tp=+v('sx')||0,tot=Math.round(t*(100+tp))/100,per=Math.ceil(Math.round(tot*100/n)/100);$('#so').textContent=t?per:'—';$('#sT').textContent=t?tot.toFixed(2):'—';$('#sm2').value=t?'يا جماعة، إجمالي الفاتورة بعد الإكرامية '+tot.toFixed(2)+' جنيه، ونصيب كل واحد '+per+' جنيه. ياريت كل واحد يظبط نصيبه. تسلموا!':''}
+C[18]=['p','🤝 تقسيم الفواتير',()=>`<div class=r><label style="flex:1"><small>الفاتورة كلها كام؟</small><input id=st type=number inputmode=decimal oninput="spl()"></label><label style="flex:1"><small>هتقسموا على كام شخص؟</small><input id=sp type=number inputmode=numeric oninput="spl()"></label><label style="flex:1"><small>الإكرامية كام %؟</small><input id=sx type=number inputmode=decimal oninput="spl()"></label></div><div class=tiles><div><i>👤</i><b id=so>—</b>نصيب كل واحد (ج)</div><div><i>🧾</i><b id=sT>—</b>الإجمالي بعد الإكرامية (ج)</div></div><textarea id=sm2 style="min-height:56px" placeholder="هتظهر هنا رسالة جاهزة تبعتها للجروب"></textarea><div class=r><button class=f onclick="cp(v('sm2'))">نسخ الرسالة</button><button onclick="waOpen(v('sm2'))">📲 واتساب</button></div>`];
+// 19 stories
+const BASE=["اللي بيبدأ النهارده، سبق اللي لسه بيخطط لبكرة.", "مش لازم تعمل كل حاجة مرة واحدة، المهم متوقفش.", "النجاح مش ضربة حظ، هو قرارات صغيرة بتتكرر.", "خليك قد كلمتك، حتى لو محدش بيراقبك.", "الوقت اللي بتضيعه مش بيرجع، فاختار هتصرفه في إيه.", "الغلط مش نهاية الطريق، لكنه فرصة تعرف منها الصح.", "اسمع أكتر ما تتكلم، هتتعلم أكتر مما تتوقع.", "متقارنش بدايتك بنهاية مشوار حد تاني.", "اللي عايز نتيجة مختلفة لازم يغيّر طريقة شغله.", "الراحة مهمة، بس متخليهاش سبب للتأجيل.", "احترامك للناس بيقول عنك أكتر من كلامك عن نفسك.", "خليك طموح، وخلي خطواتك على قد إمكانياتك.", "الإنجاز الصغير النهارده أحسن من وعد كبير لبكرة.", "اختار صحاب يشجعوك تبقى أحسن، مش يوقفوك مكانك.", "مش كل فرصة تستاهل وقتك، ومش كل تأخير خسارة.", "الهدوء وقت الخلاف قوة، مش ضعف.", "لو مش عارف تبدأ منين، ابدأ بأبسط خطوة.", "اتعلم تقول لأ للحاجة اللي بتبعدك عن هدفك.", "الفلوس بتتعوض، لكن الوقت والعلاقات محتاجين اهتمام.", "اللي بيحافظ على التفاصيل الصغيرة بيقدر المسؤوليات الكبيرة.", "متستناش الحماس، اعمل اللي عليك حتى في الأيام العادية.", "اسأل واتأكد قبل ما تحكم.", "الاعتذار وقت الغلط شجاعة مش تقليل من نفسك.", "خلي عندك خطة، وسيب مساحة للتغيير.", "مش كل كلام حلو معناه نية كويسة؛ الأفعال أوضح.", "لما تتعب، خُد راحة وارجع، متنسحبش.", "اللي بيتعلم من خسارته بيكسب خبرة للمرة الجاية.", "حافظ على كرامتك من غير ما تقلل من حد.", "الفلوس اللي بتوفرها النهارده ممكن تسندك بكرة.", "الالتزام بيبان في الأيام اللي مفيهاش مزاج.", "خلي كلامك قليل ووعدك قدّه.", "متدخلش سباق مش بتاعك.", "الفرصة اللي محتاجة منك تتنازل عن مبادئك مش مكسب.", "كل مهارة جديدة بتفتحلك باب مكنتش شايفه.", "ابدأ بالمتاح، وطوّر نفسك في الطريق.", "الناس بتفتكر المواقف أكتر من الكلام.", "لو مش قادر تغيّر الظروف، ابدأ بتغيير رد فعلك.", "اللي يعرف قيمة وقته بيعرف قيمة نفسه.", "خلي نجاحك هادي، وخلي شغلك هو اللي يتكلم.", "متاخدش قرار كبير وأنت غضبان أو مرهق.", "الاستمرارية مش معناها السرعة، معناها إنك مكمل.", "اعرف إمتى تتمسك برأيك وإمتى تراجع نفسك.", "النية الطيبة محتاجة تصرفات تثبتها.", "اللي بيحترم حدود غيره بيحافظ على علاقاته.", "مش كل تأخير معناه إنك اتأخرت عن فرصتك.", "خلي هدفك واضح، وخطتك مرنة.", "متصرفش عشان تبهر الناس؛ اصرف على اللي محتاجه فعلًا.", "القراءة والسؤال والتجربة طرق مختلفة لنفس الباب: الفهم.", "الشخص القوي مش اللي عمره ما بيغلط، القوي اللي بيتعلم.", "عامل الناس باحترام حتى وقت الاختلاف.", "خلي عندك حاجة بتتعلمها وحاجة بتستمتع بيها.", "النجاح محتاج صبر، والصبر محتاج سبب يستاهل.", "لو وعدت حد، افتكر إن وقته مهم زي وقتك.", "متسيبش يوم صعب يقنعك إن كل الأيام زيه.", "الترتيب البسيط بيوفر وقت ومجهود كبير.", "اسعى للنتيجة، لكن متنساش تستمتع بالتقدم.", "اللي بيحافظ على صحته بيحافظ على أهم أصوله.", "اختار معاركك؛ مش كل نقاش محتاج رد.", "خليك فضولي، بس راجع المعلومة قبل ما تصدقها.", "ابدأ من مكانك، مش من المكان اللي بتتمنى تكون فيه."];
+function quoteDayIndex(){const d=new Date();const key=d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();return key%Math.max(1,ST.length)}
+let ST=BASE.slice(),sti=0;
+sti=quoteDayIndex();dbp(t=>t.get('stories')).then(r=>{if(r&&r.list){ST=BASE.concat(r.list);sti=quoteDayIndex();up(19)}});
+async function stImp(inp){try{const j=JSON.parse(await inp.files[0].text()),l=j.map(x=>typeof x=='string'?x:x.text||x.story||JSON.stringify(x));await dbp(t=>t.put({id:'stories',k:'st',list:l}));ST=BASE.concat(l);sti=quoteDayIndex();toast('تمت إضافة '+l.length);up(19)}catch(e){toast('ملف JSON غير صالح')}}
+C[19]=['p','📖 حكمة اليوم',()=>`<div class=page-kicker style=text-align:center>حكمة يوم ${new Date().toLocaleDateString('ar-EG')}</div><div class=qt><span>❝</span>${esc(ST[sti%ST.length])}</div><div class=r style="justify-content:center"><button class=f onclick="sti=Math.floor(Math.random()*ST.length);up(19)">حكمة تانية</button><button onclick="cp(ST[sti%ST.length])">نسخ</button><span class=chip>${ST.length} حكمة</span></div><small class=em>الحكمة بتتغير تلقائيًا كل يوم، وتقدر تختار حكمة تانية وقت ما تحب.</small><details><summary>إضافة حكم من ملف</summary><small>ملف JSON يحتوي مصفوفة نصوص.</small><input type=file accept=".json" onchange="stImp(this)"></details>`];
+function bkImp(i){i.files[0].text().then(t=>{Object.assign(S,JSON.parse(t));save();location.reload()}).catch(()=>toast('الملف غير صالح'))}
+function toggleClockSeconds(){S.clockSeconds=S.clockSeconds===0?1:0;save();liveTick()}
+function liveTick(){const d=new Date(),time=$('#tw-time'),date=$('#tw-date');if(!time||!date)return;const opts={hour:'2-digit',minute:'2-digit',hour12:false};if(S.clockSeconds!==0)opts.second='2-digit';time.textContent=d.toLocaleTimeString('en-GB',opts);date.textContent=d.toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long',year:'numeric'});const sec=d.getHours()*3600+d.getMinutes()*60+d.getSeconds(),pct=sec/86400*100,left=86400-sec,h=Math.floor(left/3600),m=Math.floor(left%3600/60);const bar=$('#tw-progress'),l=$('#tw-left'),pc=$('#tw-percent'),dp=$('#tw-daypart'),fmt=$('#tw-format');if(bar)bar.style.width=pct.toFixed(2)+'%';if(l)l.textContent='متبقي '+h+' ساعة و'+m+' دقيقة من اليوم';if(pc)pc.textContent='عدّى '+Math.floor(pct)+'٪ من اليوم';if(dp)dp.textContent=d.getHours()<12?'صباحًا':d.getHours()<17?'بعد الظهر':'مساءً';if(fmt)fmt.textContent=S.clockSeconds===0?'إظهار الثواني':'إخفاء الثواني'}
+function cfg(){const r=document.documentElement;const h=new Date().getHours(),th=S.th||'auto';r.dataset.theme=th=='auto'?((h>=(S.ah1??6)&&h<(S.ah2??18))?'light':'dark'):th;$('#sc').style.zoom=S.zm||1;document.body.classList.toggle('noo',!S.orn);document.body.classList.toggle('nb',!S.blur);$('#wmn').textContent='❖ '+(S.wm||'Mohamed Salah')+' ❖';const side=$('.side-watermark');if(side)side.textContent=(S.wm||'Mohamed Salah').toUpperCase().split('').join(' ')}
+function st(){const o=[...document.querySelectorAll('#b23 details')].map(d=>d.open);up(23);document.querySelectorAll('#b23 details').forEach((d,i)=>d.open=!!o[i])}
+function cf(r){cfg();save();hdr();st();[1,9,26,27].forEach(up);if(r)show(cat)}
+let rc='';
+function rs(k){if(rc!=k){rc=k;toast('المس مرة أخرى للتأكيد');setTimeout(()=>rc='',3500);return}rc='';if(k=='a'){try{localStorage.removeItem(K)}catch(e){}dbp(t=>t.clear()).then(()=>location.reload());return}if(k=='e')S.exp=[];if(k=='p'){if(!vu)return toast('افتح الخزنة أولاً');S.pin='';vu=0;up(15)}save();toast('تمّ');[1,9,26,27].forEach(up)}
+C[23]=['p','⚙️ الإعدادات',()=>{setTimeout(updateNtStatus,0);const D=(t,b)=>`<details><summary>${t}</summary>${b}</details>`,ch=(k,o)=>`<div class=r>${o.map(([l,x])=>`<button class="${String(S[k]??'')==String(x)?'f':''}" onclick="S['${k}']=${typeof x=='number'?x:`'${x}'`};cf(1)">${l}</button>`).join('')}</div>`,tg=(k,l)=>`<label class=r><span style="flex:1">${l}</span><input type=checkbox ${S[k]?'checked':''} onchange="S['${k}']=this.checked?1:0;cf(1)"></label>`,nf=(k,l,u)=>`<label class=r><span style="flex:1">${l}</span><input type=number style="max-width:96px;flex:none" value="${S[k]}" onchange="S['${k}']=+this.value;cf()"><small>${u}</small></label>`,tf=(k,l)=>`<label class=r><span style="flex:1">${l}</span><input value="${esc(S[k]||'')}" onchange="S['${k}']=this.value.trim();cf()"></label>`;
+return D('🎨 المظهر',ch('th',[['تلقائي حسب الوقت','auto'],['داكن','dark'],['فاتح','light']])+nf('ah1','بداية النهار (الساعة)','ساعة')+nf('ah2','بداية الليل (الساعة)','ساعة')+ch('zm',[['صغير',.9],['متوسط',1],['كبير',1.1],['أكبر',1.25]])+tg('orn','الزخارف والزينة')+tg('blur','الشفافية الزجاجية'))
++D('👤 الهوية',tf('nm','الاسم في الترحيب')+tf('wm','العلامة المائية')+tf('origin','نقطة الانطلاق للاتجاهات'))
++D('🌅 الترحيب والتاريخ',tg('gl','عبارات ترحيب متغيّرة')+tg('gdt','التاريخ الميلادي')+tg('hij','التاريخ الهجري'))
++D('🔔 التنبيهات',tg('snd','التنبيه الصوتي')+tg('vib','الاهتزاز')+`<p class=em id=ntStatus></p><button class=f onclick="ntfAsk()">🔔 تفعيل إشعارات المتصفح</button><small>تذكيرات الاشتراكات تظهر أثناء تشغيل التطبيق. إشعارات الخلفية تحتاج خدمة Push متصلة بسيرفر.</small>`)
++D('🚇 المترو',nf('mps','الزمن بين محطتين','دقيقة')+nf('mtr','زمن التبديل بين الخطوط','دقيقة')+nf('mw','متوسط الانتظار','دقيقة'))
++D('💸 الميزانية',nf('budget','الميزانية الشهرية','جنيه'))
++D('🧩 الأقسام الظاهرة',Object.keys(C).filter(k=>k!=23).map(k=>`<label class=r><span style="flex:1">${C[k][1]}</span><input type=checkbox ${S.hid[k]?'':'checked'} onchange="S.hid[${k}]=this.checked?0:1;cf(1)"></label>`).join(''))
++D('💾 البيانات',`<div class=r><button class=f onclick="dl('jlos-backup-'+T+'.json',JSON.stringify(S))">⬇ نسخة احتياطية</button></div><label><small>استرجاع نسخة</small><input type=file accept=".json" onchange="bkImp(this)"></label><small>ملفات الخزنة والمحفظة غير داخلة في النسخة.</small><div class=r><button onclick="rs('e')">مسح المصروفات</button><button onclick="rs('p')">إزالة رمز الخزنة</button><button onclick="rs('a')">⚠️ مسح كل شيء</button></div>`)
++D('ℹ️ حول التطبيق','<p>مساحتي — Personal Utility Hub · الإصدار ٣٫١<br><small>تُحفظ بياناتك على هذا الجهاز فقط.</small></p>')}];
+
+// Discover Cairo & Giza: local destination guide with live directions opened in Google Maps.
+const PLACES=[{"n":"أهرامات الجيزة","c":"تاريخ وآثار","area":"الهرم، الجيزة","desc":"من أشهر مواقع مصر الأثرية، وتضم الأهرامات الثلاثة ومنطقة أثرية واسعة.","why":"زيارة تاريخية ومشاهدة هضبة الأهرامات."},{"n":"أبو الهول","c":"تاريخ وآثار","area":"هضبة الجيزة، الجيزة","desc":"تمثال أبو الهول بجوار أهرامات الجيزة.","why":"مناسب لزيارة تجمع بين التاريخ والتصوير."},{"n":"المتحف المصري الكبير","c":"تاريخ وآثار","area":"ميدان الرماية، طريق القاهرة الإسكندرية، الجيزة","desc":"متحف مخصص للحضارة المصرية القديمة بالقرب من الأهرامات.","why":"تجربة متحفية كبيرة ويمكن جمعه مع زيارة الأهرامات."},{"n":"المتحف المصري بالتحرير","c":"تاريخ وآثار","area":"ميدان التحرير، وسط البلد، القاهرة","desc":"متحف آثار في ميدان التحرير يضم مجموعات من تاريخ مصر القديم.","why":"اختيار مناسب لمحبي الآثار ووسط البلد."},{"n":"المتحف القومي للحضارة المصرية","c":"تاريخ وآثار","area":"عين الصيرة، الفسطاط، القاهرة","desc":"يعرض مراحل الحضارة المصرية ويضم قاعة المومياوات الملكية.","why":"زيارة ثقافية في منطقة الفسطاط."},{"n":"قلعة صلاح الدين الأيوبي","c":"تاريخ وآثار","area":"حي الخليفة، القاهرة","desc":"قلعة تاريخية تطل على أجزاء واسعة من القاهرة.","why":"مناسبة للتاريخ والمناظر والتصوير."},{"n":"مسجد محمد علي","c":"تاريخ وآثار","area":"قلعة صلاح الدين، القاهرة","desc":"مسجد تاريخي داخل القلعة معروف بقبته ومآذنه وإطلالته.","why":"يمكن زيارته ضمن جولة القلعة."},{"n":"شارع المعز","c":"تاريخ وآثار","area":"الجمالية، القاهرة","desc":"شارع تاريخي يضم مباني وآثارًا من عصور إسلامية مختلفة.","why":"مناسب للمشي والتصوير واستكشاف القاهرة القديمة."},{"n":"خان الخليلي","c":"تاريخ وآثار","area":"الجمالية، القاهرة","desc":"سوق تاريخي يضم محلات للهدايا والمشغولات والمقاهي.","why":"خروجة للمشي والتسوق في القاهرة التاريخية."},{"n":"مسجد السلطان حسن","c":"تاريخ وآثار","area":"ميدان صلاح الدين، القاهرة","desc":"مجمع معماري مملوكي بارز بجوار مسجد الرفاعي.","why":"مناسب لمحبي العمارة والتاريخ."},{"n":"مسجد الرفاعي","c":"تاريخ وآثار","area":"ميدان صلاح الدين، القاهرة","desc":"مسجد تاريخي مقابل مسجد السلطان حسن.","why":"يمكن زيارته مع السلطان حسن في نفس الجولة."},{"n":"مسجد أحمد بن طولون","c":"تاريخ وآثار","area":"السيدة زينب، القاهرة","desc":"مسجد تاريخي واسع ذو طراز معماري مميز.","why":"زيارة هادئة لمحبي العمارة الإسلامية."},{"n":"متحف جاير أندرسون","c":"تاريخ وآثار","area":"ميدان أحمد بن طولون، السيدة زينب، القاهرة","desc":"بيتان تاريخيان يضمان مقتنيات ومجموعات فنية وتراثية.","why":"تجربة مختلفة داخل بيت تاريخي."},{"n":"المتحف القبطي","c":"تاريخ وآثار","area":"مجمع الأديان، مصر القديمة، القاهرة","desc":"متحف يعرض جوانب من الفن والتراث القبطي.","why":"يمكن جمعه مع زيارة مجمع الأديان."},{"n":"الكنيسة المعلقة","c":"تاريخ وآثار","area":"مجمع الأديان، مصر القديمة، القاهرة","desc":"كنيسة تاريخية من أبرز معالم منطقة مصر القديمة.","why":"زيارة دينية وتاريخية."},{"n":"جامع عمرو بن العاص","c":"تاريخ وآثار","area":"مصر القديمة، القاهرة","desc":"من أبرز المساجد التاريخية في مصر وأفريقيا.","why":"مناسب لجولة تاريخية في الفسطاط."},{"n":"قصر المنيل","c":"تاريخ وآثار","area":"شارع الملك الصالح، جزيرة الروضة، القاهرة","desc":"قصر تاريخي ومتحف يضم مباني وحدائق ومقتنيات.","why":"قريب من مناطق وسط وجنوب القاهرة."},{"n":"قصر عابدين","c":"تاريخ وآثار","area":"ميدان عابدين، وسط القاهرة","desc":"قصر تاريخي يضم متاحف ومجموعات مرتبطة بتاريخ مصر الحديث.","why":"زيارة مناسبة لمحبي التاريخ الحديث."},{"n":"قصر البارون إمبان","c":"تاريخ وآثار","area":"شارع العروبة، مصر الجديدة، القاهرة","desc":"قصر مميز معماريًا في منطقة مصر الجديدة.","why":"مناسب للتصوير واستكشاف مصر الجديدة."},{"n":"متحف الطفل","c":"ثقافة وفنون","area":"شارع أبو بكر الصديق، مصر الجديدة، القاهرة","desc":"مركز تفاعلي للمعرفة والأنشطة العائلية.","why":"خيار مناسب للزيارات العائلية."},{"n":"متحف الفن الإسلامي","c":"ثقافة وفنون","area":"باب الخلق، القاهرة","desc":"متحف يضم مجموعات من الفنون والحرف الإسلامية.","why":"مناسب لمحبي الفنون والتاريخ."},{"n":"متحف أم كلثوم","c":"ثقافة وفنون","area":"قصر المانسترلي، جزيرة الروضة، القاهرة","desc":"متحف يوثق حياة وأعمال أم كلثوم.","why":"زيارة ثقافية لمحبي الموسيقى المصرية."},{"n":"متحف محمود مختار","c":"ثقافة وفنون","area":"أرض الجزيرة، الزمالك، القاهرة","desc":"متحف مخصص لأعمال النحات محمود مختار.","why":"يمكن زيارته مع دار الأوبرا ومحيط الجزيرة."},{"n":"دار الأوبرا المصرية","c":"ثقافة وفنون","area":"أرض الجزيرة، الزمالك، القاهرة","desc":"مركز للعروض الموسيقية والفنية والمسرحية.","why":"مناسب لمتابعة الحفلات والفعاليات."},{"n":"ساقية الصاوي","c":"ثقافة وفنون","area":"شارع 26 يوليو، الزمالك، القاهرة","desc":"مركز ثقافي يقدم حفلات وندوات وأنشطة فنية.","why":"مكان لمتابعة الفعاليات والعروض."},{"n":"درب 1718","c":"ثقافة وفنون","area":"الفخارين، مصر القديمة، القاهرة","desc":"مركز للفنون المعاصرة والمعارض والفعاليات الثقافية.","why":"مناسب للمعارض والأنشطة الفنية."},{"n":"برج القاهرة","c":"خروجات ومناظر","area":"جزيرة الزمالك، القاهرة","desc":"برج مشاهدة يطل على القاهرة ونهر النيل.","why":"مناسب لمشاهدة المدينة والتصوير."},{"n":"حديقة الأزهر","c":"حدائق وطبيعة","area":"شارع صلاح سالم، الدرب الأحمر، القاهرة","desc":"حديقة واسعة تضم مساحات خضراء ومطاعم وإطلالات على القاهرة القديمة.","why":"مناسبة للمشي والجلوس والخروجات."},{"n":"حديقة الأورمان","c":"حدائق وطبيعة","area":"ميدان أحمد زويل، الجيزة","desc":"حديقة نباتية تاريخية تضم أشجارًا ونباتات متنوعة.","why":"خيار للمشي والهدوء في الجيزة."},{"n":"الحديقة اليابانية بحلوان","c":"حدائق وطبيعة","area":"شارع منصور، حلوان، القاهرة","desc":"حديقة بطابع ياباني تضم بحيرات وتماثيل ومساحات خضراء.","why":"خروجة مفتوحة في جنوب القاهرة."},{"n":"حديقة الحرية","c":"حدائق وطبيعة","area":"جزيرة الزمالك، القاهرة","desc":"حديقة صغيرة تضم تماثيل ومساحات للجلوس بالقرب من النيل.","why":"مناسبة لجولة قصيرة في الزمالك."},{"n":"حديقة الفسطاط","c":"حدائق وطبيعة","area":"الفسطاط، مصر القديمة، القاهرة","desc":"مساحة مفتوحة في منطقة الفسطاط بالقرب من مواقع ثقافية وتاريخية.","why":"يمكن جمعها مع متحف الحضارة ومجمع الأديان."},{"n":"حديقة الأسرة","c":"حدائق وطبيعة","area":"مدخل الرحاب 2، طريق السويس، القاهرة الجديدة","desc":"وجهة عائلية تضم مساحات خضراء وأنشطة ومرافق ترفيهية.","why":"مناسبة ليوم عائلي طويل."},{"n":"حديقة الجيزة","c":"ترفيه وأنشطة","area":"منطقة العجوزة، الجيزة","desc":"حديقة ترفيهية في نطاق الجيزة وتُعرف أيضًا باسم سفاري بارك في بعض الأدلة.","why":"خيار لخروجة مفتوحة؛ تحقق من الأنشطة المتاحة قبل الذهاب."},{"n":"دريم بارك","c":"ترفيه وأنشطة","area":"مدينة دريم لاند، 6 أكتوبر، الجيزة","desc":"مدينة ملاهٍ تضم ألعابًا وأنشطة ترفيهية.","why":"مناسبة لمجموعة أصدقاء أو يوم ترفيهي."},{"n":"مول مصر","c":"مولات وتسوق","area":"طريق الواحات، 6 أكتوبر، الجيزة","desc":"مركز تسوق وترفيه يضم متاجر ومطاعم وسينما وسكي مصر.","why":"يمكن قضاء عدة ساعات بين التسوق والأنشطة."},{"n":"مول العرب","c":"مولات وتسوق","area":"ميدان جهينة، 6 أكتوبر، الجيزة","desc":"مركز تسوق كبير يضم متاجر ومطاعم ومناطق ترفيه.","why":"مناسب للتسوق والخروجات الجماعية."},{"n":"كايرو فستيفال سيتي مول","c":"مولات وتسوق","area":"الطريق الدائري، التجمع الخامس، القاهرة الجديدة","desc":"مركز تسوق ومطاعم وسينما ونافورة راقصة.","why":"خيار متكامل للتسوق والطعام والترفيه."},{"n":"سيتي ستارز","c":"مولات وتسوق","area":"شارع عمر بن الخطاب، مدينة نصر، القاهرة","desc":"مركز تسوق وترفيه يضم متاجر ومطاعم وسينما.","why":"مناسب لخروجة في شرق القاهرة."},{"n":"سيتي سنتر ألماظة","c":"مولات وتسوق","area":"طريق السويس، شيراتون، القاهرة","desc":"مركز تسوق يضم متاجر ومطاعم وسينما.","why":"خيار قريب من مصر الجديدة ومدينة نصر."},{"n":"بوينت 90 مول","c":"مولات وتسوق","area":"شارع التسعين، التجمع الخامس، القاهرة الجديدة","desc":"مركز تسوق وترفيه في منطقة الجامعة الأمريكية.","why":"مناسب للمطاعم والسينما والخروجات."},{"n":"أوبن إير مول مدينتي","c":"مولات وتسوق","area":"مدينتي، طريق القاهرة السويس","desc":"مركز تسوق مفتوح يضم متاجر ومطاعم ومناطق جلوس.","why":"مناسب للمشي والتسوق."},{"n":"أركان بلازا","c":"مولات وتسوق","area":"الشيخ زايد، الجيزة","desc":"وجهة مفتوحة تضم مطاعم ومقاهي ومحلات.","why":"مناسبة لخروجة أكل وقعدة."},{"n":"Walk of Cairo","c":"مولات وتسوق","area":"الشيخ زايد، الجيزة","desc":"وجهة مفتوحة للمطاعم والمقاهي والتسوق.","why":"مناسبة للمشي والقعدة مع الأصدقاء."},{"n":"ZED Park","c":"ترفيه وأنشطة","area":"الشيخ زايد، الجيزة","desc":"وجهة ترفيهية وحدائق وفعاليات في الشيخ زايد.","why":"تابع الفعاليات ومواعيد التشغيل قبل الزيارة."},{"n":"سكي مصر","c":"ترفيه وأنشطة","area":"مول مصر، 6 أكتوبر، الجيزة","desc":"منطقة أنشطة ثلجية داخل مول مصر.","why":"تجربة مختلفة عن الخروجات المعتادة."},{"n":"كيدزانيا القاهرة","c":"ترفيه وأنشطة","area":"كايرو فستيفال سيتي، التجمع الخامس، القاهرة الجديدة","desc":"مدينة تفاعلية وأنشطة تمثيل أدوار للأطفال.","why":"وجهة عائلية للأطفال."},{"n":"Bounce Egypt","c":"ترفيه وأنشطة","area":"كايرو فستيفال سيتي، التجمع الخامس، القاهرة الجديدة","desc":"مركز ترامبولين وأنشطة حركة داخلية.","why":"مناسب لمحبي الأنشطة الحركية؛ تحقق من الحجز."},{"n":"ماجيك بلانيت","c":"ترفيه وأنشطة","area":"سيتي سنتر ألماظة، شيراتون، القاهرة","desc":"مركز ألعاب وترفيه داخلي.","why":"مناسب للألعاب والأنشطة داخل المول."},{"n":"مركز الجزيرة للفنون","c":"ثقافة وفنون","area":"الزمالك، القاهرة","desc":"مركز يضم معارض وأنشطة فنية ومتاحف متخصصة.","why":"خيار للمهتمين بالفنون والمعارض."},{"n":"حديقة الأندلس","c":"حدائق وطبيعة","area":"كورنيش النيل، الزمالك، القاهرة","desc":"حديقة تاريخية على جزيرة الزمالك بالقرب من النيل.","why":"مناسبة لجولة قصيرة والتصوير."},{"n":"جسر قصر النيل","c":"خروجات ومناظر","area":"وسط البلد إلى الزمالك، القاهرة","desc":"جسر شهير للمشي ومشاهدة النيل ووسط القاهرة.","why":"خروجة بسيطة خصوصًا وقت الغروب."},{"n":"كورنيش النيل بالمعادي","c":"خروجات ومناظر","area":"المعادي، القاهرة","desc":"منطقة ممتدة على النيل تضم أماكن للجلوس والمطاعم.","why":"مناسب لقعدة على النيل."},{"n":"جزيرة الزمالك","c":"خروجات ومناظر","area":"الزمالك، القاهرة","desc":"منطقة تضم شوارع هادئة ومقاهي ومراكز ثقافية وحدائق.","why":"مناسبة لجولة مشي تجمع أكثر من مكان."},{"n":"محمية وادي دجلة","c":"حدائق وطبيعة","area":"زهراء المعادي، القاهرة","desc":"محمية طبيعية تضم مسارات صحراوية وتكوينات صخرية.","why":"مناسبة للمشي والأنشطة الخارجية مع مراعاة قواعد المحمية."},{"n": "Inlane Bowling – نايلوس باي", "c": "ترفيه وأنشطة", "area": "الدقي، الجيزة", "desc": "مركز بولينج في الدقي، ومعاه ألعاب أركيد وواقع افتراضي وكافيه حسب الخدمات المعلنة للفرع.", "why": "خروجة تنافسية مع أصحابك، وممكن تكملوا اليوم بأكل أو قهوة في نفس المنطقة."},{"n": "Monoplay – ألماظة أفينيو", "c": "ترفيه وأنشطة", "area": "ألماظة، مصر الجديدة، القاهرة", "desc": "كافيه ألعاب جماعية فيه ألعاب طاولة وكروت مع مساعدة من فريق المكان في شرحها.", "why": "مناسب لمجموعة صحاب عايزين قعدة فيها لعب وتحديات بدل القعدة التقليدية."},{"n": "The Playhaus", "c": "ترفيه وأنشطة", "area": "دجلة، المعادي، القاهرة", "desc": "كافيه متخصص في ألعاب الطاولة، وفيه اختيارات كتير لألعاب جماعية بمستويات مختلفة.", "why": "اختيار حلو لجروب صغير أو كبير يحب المنافسة والضحك."},{"n": "Cursed Escape Rooms", "c": "ترفيه وأنشطة", "area": "شارع مصدق، الدقي، الجيزة", "desc": "غرف هروب بطابع رعب وألغاز وتجارب جماعية داخل سيناريوهات مختلفة.", "why": "لو أصحابك بيحبوا الألغاز وأجواء الرعب، دي خروجة فيها تعاون وتحدي. اسألوا عن مستوى الرعب والعمر المناسب قبل الحجز."},{"n": "Decode Egypt", "c": "ترفيه وأنشطة", "area": "شارع قمبيز، الدقي، الجيزة", "desc": "تجربة غرف هروب تعتمد على حل الألغاز والعمل الجماعي في وقت محدد.", "why": "مناسبة لجروب من 3 إلى 10 أفراد، والحجز المسبق أفضل."},{"n": "Pyramaze Escape Rooms", "c": "ترفيه وأنشطة", "area": "شارع علي أمين، مدينة نصر، القاهرة", "desc": "غرف هروب بأفكار قصصية وألغاز، منها تجارب رعب ومغامرة.", "why": "تحدي جماعي مناسب للأصحاب اللي يحبوا يفكروا ويتعاونوا."},{"n": "Park Egypt", "c": "ترفيه وأنشطة", "area": "محور المشير طنطاوي، مدينة نصر، القاهرة", "desc": "مركز أنشطة خارجية يشتهر بالبينتبول والكارتينج وبعض الألعاب الجماعية.", "why": "مناسب لجروب عايز حركة ومنافسة. تأكد من الأنشطة المتاحة والحجز قبل الزيارة."},{"n": "Adrenalin Experience – Tanza", "c": "ترفيه وأنشطة", "area": "طريق الواحات أمام مول مصر، 6 أكتوبر، الجيزة", "desc": "منطقة مغامرات فيها بينتبول وليزر تاج وأنشطة حركية ومغامرات خارجية.", "why": "من أفضل أنواع الخروجات للجروبات اللي بتحب التحديات واللعب في فرق. راجع مواعيد التشغيل والأسعار قبل التحرك."},{"n": "EgyRow Kayak & Canoe Academy", "c": "ترفيه وأنشطة", "area": "147 شارع النيل، الدقي، الجيزة", "desc": "نشاط كاياك وتجديف على النيل من منطقة نادي الكشافة البحرية.", "why": "تجربة مختلفة مع أصحابك، ويفضل التواصل مع الأكاديمية لمعرفة المواعيد ومتطلبات المشاركة."},{"n": "Cairow Water Sports", "c": "ترفيه وأنشطة", "area": "نادي التجديف اليوناني، شارع النيل، الدقي، الجيزة", "desc": "أنشطة رياضات مائية وتجديف على النيل من خلال أكاديمية متخصصة.", "why": "خروجة صباحية فيها حركة وتجربة جديدة. اسأل عن الحجز والتدريب للمبتدئين."},{"n": "Il Campo", "c": "حدائق وطبيعة", "area": "منيل شيحة، الجيزة", "desc": "وجهة خارجية بطابع ريفي ومساحات خضراء وأنشطة وجلسات في الهواء الطلق.", "why": "قريب من منيل شيحة ومناسب ليوم هادي مع أصحابك بعيد عن زحمة وسط البلد. اسأل عن الباقات والأنشطة قبل الذهاب."},{"n": "The Bunker", "c": "ترفيه وأنشطة", "area": "التجمع الخامس، القاهرة الجديدة", "desc": "مكان ترفيهي للألعاب والتحديات الجماعية في أجواء داخلية.", "why": "اختيار مناسب لجروب يحب الألعاب والتنافس. تحقق من الأنشطة المتاحة في يوم الزيارة."}];
+let dSelected=-1,dQuery='',dCategory='الكل',dShown=12;
+function placeIcon(c){return ({'تاريخ وآثار':'🏛️','ثقافة وفنون':'🎭','حدائق وطبيعة':'🌿','خروجات ومناظر':'🌇','مولات وتسوق':'🛍️','ترفيه وأنشطة':'🎡'})[c]||'📍'}
+function dMaps(i,mode='transit'){
+ const p=PLACES[i];if(!p)return;
+ const origin=S.origin||'منيل شيحة، الجيزة، مصر';
+ const dest=p.n+'، '+p.area+'، مصر';
+ const url='https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(origin)+'&destination='+encodeURIComponent(dest)+'&travelmode='+mode;
+ window.open(url,'_blank','noopener');
+}
+function dMapSearch(i){
+ const p=PLACES[i];if(!p)return;
+ window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.n+'، '+p.area+'، مصر'),'_blank','noopener');
+}
+function dOpen(i){dSelected=i;up(27);const e=$('#b27');if(e)e.scrollIntoView({behavior:'smooth',block:'start'})}
+function dOpenByName(n){const i=PLACES.findIndex(p=>p.n===n);if(i>=0){show('d');setTimeout(()=>dOpen(i),40)}}
+function dBack(){dSelected=-1;up(27)}
+function dToggleFav(i){
+ const p=PLACES[i];if(!p)return;
+ S.favs=S.favs||[];
+ const x=S.favs.indexOf(p.n);
+ if(x>=0)S.favs.splice(x,1);else S.favs.unshift(p.n);
+ save();if(dSelected>=0)up(27);else dRenderList();toast(x>=0?'تمت إزالة المكان من المفضلة':'تم حفظ المكان في المفضلة');
+}
+function dFilter(c){dCategory=c;dShown=12;dRenderList()}
+function dSearch(){dQuery=v('dq');dShown=12;dRenderList()}
+function dMore(){dShown+=12;dRenderList()}
+function dRenderList(){
+ const box=$('#dlist');if(!box)return;
+ const q=dQuery.trim().toLocaleLowerCase('ar');
+ const filtered=PLACES.map((p,i)=>({...p,i})).filter(p=>(dCategory==='الكل'||p.c===dCategory)&&(!q||(p.n+' '+p.area+' '+p.desc+' '+p.c).toLocaleLowerCase('ar').includes(q)));
+ const shown=filtered.slice(0,dShown);
+ box.innerHTML=`<div class=page-kicker>تم تجهيز ${PLACES.length} وجهة في القاهرة والجيزة</div><div class=place-list>${shown.map(p=>`<article class=place-card><div class=place-thumb>${placeIcon(p.c)}</div><div><h3>${esc(p.n)}</h3><p>${esc(p.area)} · ${esc(p.c)}</p><div class=place-actions><button class=f onclick="dOpen(${p.i})">التفاصيل والاتجاهات</button><button onclick="dToggleFav(${p.i})">${(S.favs||[]).includes(p.n)?'★ محفوظ':'☆ حفظ'}</button></div></div></article>`).join('')}</div><div class=r style="justify-content:space-between"><small>عرض ${shown.length} من ${filtered.length} نتيجة</small>${shown.length<filtered.length?'<button onclick="dMore()">عرض المزيد</button>':''}</div>${filtered.length?'':'<p class=em>مفيش نتائج مطابقة. جرّب اسم منطقة أو تصنيف تاني.</p>'}`;
+}
+function dRender(){
+ const p=dSelected>=0?PLACES[dSelected]:null;
+ if(p){
+  const fav=(S.favs||[]).includes(p.n);
+  return `<div class=r><button onclick="dBack()">← رجوع للأماكن</button><button onclick="dToggleFav(${dSelected})">${fav?'★ إزالة من المفضلة':'☆ إضافة للمفضلة'}</button></div><div class=place-detail><div class=place-thumb style="width:82px;height:82px;font-size:38px">${placeIcon(p.c)}</div><div class=page-kicker>${esc(p.c)}</div><h3>${esc(p.n)}</h3><p><b>المنطقة:</b> ${esc(p.area)}</p><p>${esc(p.desc)}</p><div class=place-route><b>ليه ممكن تروح المكان ده؟</b><div>${esc(p.why)}</div></div><div class=place-route><b>هتروح إزاي منين؟</b><div>نقطة البداية: <b>${esc(S.origin||'منيل شيحة، الجيزة، مصر')}</b></div><p>اضغط على اتجاهات المواصلات العامة علشان Google Maps يعرض لك المسارات المتاحة وقت البحث، بما فيها المترو والتبديلات والمشي حسب الرحلة.</p><small>المسار والأسعار ومواعيد المواصلات قد تتغير؛ راجع التفاصيل قبل التحرك.</small></div><div class=qa><button class=f onclick="dMaps(${dSelected},'transit')">🚇 مواصلات عامة</button><button onclick="dMaps(${dSelected},'driving')">🚗 بالسيارة</button><button onclick="dMapSearch(${dSelected})">📍 الموقع والصور</button><button onclick="dMaps(${dSelected},'walking')">🚶 مشي</button></div></div>`;
+ }
+ return `<div class=nx><div class=page-kicker>CAIRO & GIZA DISCOVERY GUIDE</div><div style="font:700 23px/1.5 'Aref Ruqaa',Cairo,serif">أماكن جديدة تستاهل الخروجة</div><small>دليل فيه ${PLACES.length} مكانًا موزعين على القاهرة والجيزة.</small></div><div class=place-tools><input id=dq placeholder="ابحث باسم المكان أو المنطقة..." value="${esc(dQuery)}" oninput="dSearch()"><select onchange="dFilter(this.value)">${['الكل','تاريخ وآثار','ثقافة وفنون','حدائق وطبيعة','خروجات ومناظر','مولات وتسوق','ترفيه وأنشطة'].map(c=>`<option ${dCategory===c?'selected':''}>${c}</option>`).join('')}</select></div><div id=dlist></div><div class=place-route><b>مصادر ومعلومات الزيارة</b><p>بيانات الأماكن التعريفية مجمعة من بوابة محافظة القاهرة والجهات الرسمية، لكن المواعيد والأسعار قد تتغير. استخدم خرائط Google للتحقق من الاتجاهات الحالية.</p><a href="https://cairo.gov.eg/en/tourism/tourism-destinations/cultural/museums/" target="_blank" rel="noopener">بوابة محافظة القاهرة – المتاحف</a><br><a href="https://egymonuments.gov.eg/" target="_blank" rel="noopener">بوابة الآثار المصرية</a></div>`;
+}
+function dInit(){dRenderList()}
+C[27]=['d','🧭 اكتشف القاهرة',()=>{setTimeout(dInit,0);return dRender()}];
+
+delete C[3];delete C[6];delete C[12];delete C[20];delete C[22];delete C[25];
+const CATS={h:['⌂','الرئيسية'],m:['◈','أموالي'],r:['🚇','التنقل'],d:['🧭','اكتشف'],w:['▦','الفريق'],p:['✦','أدواتي']},PGS={m:'المصروفات والميزانية والاشتراكات والبطاقات',r:'مترو القاهرة وأدوات التنقل',d:'دليل الخروجات في القاهرة والجيزة',w:'مشاريع الفريق والتنسيق',p:'أدواتك الشخصية والإعدادات'},ORD={1:1,4:1,5:1,27:1,9:1,26:2,13:3,14:4,18:1,7:2,8:3,10:4,11:5,19:6,15:7,16:8,23:9};
+S.team.forEach(t=>{if(t.st===undefined){t.st=t.d?2:0;delete t.d}if(t.w=='؟')t.w=''});S.mem=[...new Set([...S.mem,...S.team.map(t=>t.w).filter(Boolean)])];
+let cat='h';
+function show(c){cat=c;document.querySelectorAll('.card').forEach(e=>e.style.display=e.dataset.c==c&&!S.hid[e.dataset.k]?'':'none');document.querySelectorAll('#dock button').forEach(b=>b.className=b.dataset.c==c?'on':'');hdr();$('#sc').scrollTo(0,0);if(c==='h')setTimeout(liveTick,0);const a=$('#app');a.classList.remove('page-enter');void a.offsetWidth;a.classList.add('page-enter')}
+function logo(z){return `<svg viewBox="0 0 64 64" width=${z} height=${z} xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lgd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8A58B"/><stop offset="1" stop-color="#A95C42"/></linearGradient></defs><rect width="64" height="64" rx="18" fill="url(#lgd)"/><rect x="14" y="14" width="15" height="15" rx="4" fill="#FDFBF7"/><rect x="35" y="14" width="15" height="15" rx="4" fill="#FDFBF7" opacity=".88"/><rect x="14" y="35" width="15" height="15" rx="4" fill="#FDFBF7" opacity=".88"/><path d="M42.5 35v15m-7.5-7.5h15" stroke="#FDFBF7" stroke-width="5" stroke-linecap="round"/></svg>`}
+const PH={m:['طاب صباحك يا {n} ☕','صباح العزيمة والنشاط ⚡','صباح الخير يا {n} 🌅','بداية موفّقة ليومٍ مثمر 🎯','أشرقت شمس يوم جديد فاغتنمه 🌞','صباح النور والإنجاز يا {n} ✨'],n:['أحسنت يا بطل 💪','طاب ظهرك يا {n} 🌤','واصل عطاءك يا {n} 🔥','منتصف اليوم، فجدّد نشاطك ⚡','ظهيرة مباركة يا {n} ☀️'],a:['عصرٌ موفّق يا {n} 🌇','اقترب الإنجاز، واصل يا بطل 💪','طاب عصرك يا {n} ☕','أنت على الطريق الصحيح 🎯','لا تتوقف الآن فالنهاية قريبة 🏁'],e:['مساء الإنجاز يا {n} 🌙','مساء الخير يا {n} ✨','طاب مساؤك وحصاد يومك طيّب 🌆','مساء الهدوء والتأمل 🌙','ختامٌ جميل ليومك بإذن الله 🌟'],g:['ليلة هادئة يا {n} 🌌','حان وقت الراحة فنم باكراً 😴','سهرٌ مبارك، ولا تنسَ راحتك 🌙','قسطٌ من النوم خيرٌ لإنتاجيتك غداً 💤','تصبح على خير يا {n} ✨']};
+let GM,GI;
+{const h=new Date().getHours();GM=h>=5&&h<11?'m':h>=11&&h<15?'n':h>=15&&h<18?'a':h>=18&&h<22?'e':'g';S.lgi=S.lgi||{};const L=PH[GM],p=S.lgi[GM]===undefined?-1:S.lgi[GM];let i;do{i=Math.floor(Math.random()*L.length)}while(i==p&&L.length>1);GI=i;S.lgi[GM]=i}
+function hdr(){if(cat!='h'){$('#gr').textContent=CATS[cat][0]+' '+CATS[cat][1];$('#dt').innerHTML='<div>'+PGS[cat]+'</div>';return}$('#gr').textContent=S.gl?PH[GM][GI].replace('{n}',S.nm||'محمد'):'أهلاً بك يا '+(S.nm||'محمد');const x=[],g=dts(new Date());if(S.gdt)x.push(g[0]);if(S.hij)x.push(g[1]);$('#dt').innerHTML=x.map(t=>`<div>${t}</div>`).join('')}
+cfg();hdr();
+$('#lg').innerHTML=logo(34);
+{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=c.height=180;c.getContext('2d').drawImage(im,0,0,180,180);['apple-touch-icon','icon'].forEach(r=>{const l=document.createElement('link');l.rel=r;l.href=c.toDataURL();document.head.appendChild(l)})};im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(logo(180).replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" '))}
+$('#dock').innerHTML=Object.keys(CATS).map(k=>`<button data-c=${k} onclick="show('${k}')"><span>${CATS[k][0]}</span>${CATS[k][1]}</button>`).join('');
+$('#app').innerHTML=Object.keys(C).map(k=>{const t=C[k][1],i=t.indexOf(' ');return `<section class=card data-k=${k} data-c=${C[k][0]} style="order:${ORD[k]||k}"><h2><i class=ic>${t.slice(0,i)}</i>${t.slice(i+1)}</h2><div id=b${k}></div></section>`}).join('');
+Object.keys(C).forEach(k=>up(k));show('h');
+try{if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{})}catch(e){}
+setInterval(()=>{cl();mTick();liveTick();if(lk(new Date())!=T)location.reload()},1000);setInterval(()=>{if((S.th||'auto')=='auto')cfg();checkSubReminders()},60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden){liveTick();checkSubReminders()}});window.addEventListener('focus',()=>{liveTick();checkSubReminders()});updateNtStatus();checkSubReminders();liveTick();
+save();
+</script></body></html>

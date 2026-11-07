@@ -1,0 +1,20 @@
+{
+  "name": "مساحتي — Personal Utility Hub",
+  "short_name": "مساحتي",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#1C1310",
+  "theme_color": "#1C1310",
+  "lang": "ar",
+  "dir": "rtl",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
